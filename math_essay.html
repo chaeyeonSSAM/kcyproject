@@ -1,0 +1,1383 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>수리논술 기출 학습 플랫폼</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600;700&family=Noto+Sans+KR:wght@300;400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+<style>
+:root {
+  --bg:#0b0f1a; --bg2:#111827; --bg3:#1a2235; --bg4:#1f2d45;
+  --border:#2a3a55; --border2:#344766;
+  --text:#e2e8f0; --text2:#94a3b8; --text3:#64748b;
+  --accent:#60a5fa; --accent2:#3b82f6;
+  --gold:#fbbf24; --gold2:#f59e0b;
+  --green:#34d399; --red:#f87171;
+  --purple:#a78bfa; --teal:#2dd4bf; --orange:#fb923c;
+  --shadow:0 4px 32px rgba(0,0,0,.5);
+  --shadow-sm:0 2px 12px rgba(0,0,0,.3);
+  --r:12px; --r-sm:8px;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.7;overflow-x:hidden;}
+
+/* HEADER */
+.header{position:sticky;top:0;z-index:100;background:rgba(11,15,26,0.92);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:64px;}
+.logo{display:flex;align-items:center;gap:12px;font-family:'Noto Serif KR',serif;font-size:20px;font-weight:700;color:var(--text);text-decoration:none;}
+.logo-icon{width:36px;height:36px;background:linear-gradient(135deg,var(--accent2),var(--purple));border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;}
+.header-tabs{display:flex;gap:4px;background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:4px;}
+.header-tab{padding:6px 18px;border-radius:7px;border:none;cursor:pointer;font-family:'Noto Sans KR',sans-serif;font-size:13px;font-weight:500;transition:all .2s;background:transparent;color:var(--text2);}
+.header-tab.active{background:var(--accent2);color:#fff;}
+.header-tab:hover:not(.active){background:var(--bg4);color:var(--text);}
+
+/* LAYOUT */
+.main{display:flex;min-height:calc(100vh - 64px);}
+
+/* SIDEBAR */
+.sidebar{width:270px;min-width:270px;background:var(--bg2);border-right:1px solid var(--border);padding:20px 14px;display:flex;flex-direction:column;gap:4px;overflow-y:auto;position:sticky;top:64px;height:calc(100vh - 64px);}
+.sidebar-section{margin-bottom:2px;}
+.sidebar-label{font-size:11px;font-weight:700;letter-spacing:.08em;color:var(--text3);text-transform:uppercase;padding:8px 10px 4px;}
+.sidebar-btn{width:100%;text-align:left;padding:8px 12px;border-radius:var(--r-sm);border:none;background:transparent;color:var(--text2);font-size:13px;cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:8px;font-family:'Noto Sans KR',sans-serif;}
+.sidebar-btn:hover{background:var(--bg3);color:var(--text);}
+.sidebar-btn.active{background:rgba(59,130,246,.18);color:var(--accent);}
+.sidebar-btn .badge{margin-left:auto;font-size:11px;background:var(--bg4);color:var(--text3);padding:2px 7px;border-radius:10px;}
+
+/* CONTENT */
+.content{flex:1;padding:28px 32px;overflow-y:auto;}
+
+/* FILTER BAR */
+.filter-bar{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:24px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:16px;}
+.filter-group{display:flex;flex-direction:column;gap:4px;min-width:130px;}
+.filter-label{font-size:11px;color:var(--text3);font-weight:600;letter-spacing:.05em;}
+.filter-select{background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:7px 12px;border-radius:var(--r-sm);font-size:13px;font-family:'Noto Sans KR',sans-serif;cursor:pointer;outline:none;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%2364748b' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;padding-right:30px;}
+.filter-select:focus{border-color:var(--accent2);}
+.filter-btn{align-self:flex-end;padding:8px 20px;background:var(--accent2);color:#fff;border:none;border-radius:var(--r-sm);font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;font-family:'Noto Sans KR',sans-serif;}
+.filter-btn:hover{background:var(--accent);transform:translateY(-1px);}
+
+/* PROBLEM GRID */
+.problem-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:14px;}
+.problem-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:18px;cursor:pointer;transition:all .2s;position:relative;overflow:hidden;}
+.problem-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--accent2),var(--purple));opacity:0;transition:opacity .2s;}
+.problem-card:hover{border-color:var(--border2);transform:translateY(-2px);box-shadow:var(--shadow);}
+.problem-card:hover::before{opacity:1;}
+.card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.card-meta{display:flex;gap:5px;flex-wrap:wrap;}
+.tag{font-size:11px;font-weight:600;padding:3px 9px;border-radius:20px;display:inline-block;}
+.tag-univ-skku{background:rgba(251,191,36,.15);color:var(--gold);}
+.tag-univ-khu{background:rgba(167,139,250,.15);color:var(--purple);}
+.tag-univ-kku{background:rgba(45,212,191,.15);color:var(--teal);}
+.tag-univ-cau{background:rgba(251,146,60,.15);color:var(--orange);}
+.tag-univ-etc{background:rgba(255,255,255,.07);color:var(--text2);}
+.tag-diff-상{background:rgba(248,113,113,.15);color:var(--red);}
+.tag-diff-중{background:rgba(251,191,36,.15);color:var(--gold);}
+.tag-diff-하{background:rgba(52,211,153,.15);color:var(--green);}
+.tag-diff-최상{background:rgba(167,139,250,.2);color:var(--purple);}
+.tag-type{background:rgba(96,165,250,.12);color:var(--accent);}
+.tag-year{background:rgba(255,255,255,.07);color:var(--text2);}
+.tag-mock{background:rgba(45,212,191,.1);color:var(--teal);}
+.card-title{font-size:15px;font-weight:600;color:var(--text);margin-bottom:6px;font-family:'Noto Serif KR',serif;}
+.card-desc{font-size:13px;color:var(--text2);line-height:1.6;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.card-footer{display:flex;align-items:center;justify-content:space-between;margin-top:12px;padding-top:10px;border-top:1px solid var(--border);}
+.card-topics{display:flex;gap:4px;flex-wrap:wrap;}
+.topic-chip{font-size:11px;color:var(--text3);background:var(--bg3);padding:2px 7px;border-radius:4px;border:1px solid var(--border);}
+.card-arrow{color:var(--text3);font-size:18px;transition:transform .2s;}
+.problem-card:hover .card-arrow{transform:translateX(4px);color:var(--accent);}
+
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.75);backdrop-filter:blur(6px);display:flex;align-items:flex-start;justify-content:center;padding:20px;overflow-y:auto;opacity:0;pointer-events:none;transition:opacity .25s;}
+.modal-overlay.open{opacity:1;pointer-events:all;}
+.modal{background:var(--bg2);border:1px solid var(--border2);border-radius:16px;width:100%;max-width:880px;margin:auto;transform:translateY(20px);transition:transform .25s;overflow:hidden;}
+.modal-overlay.open .modal{transform:translateY(0);}
+.modal-header{padding:22px 28px 18px;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;justify-content:space-between;gap:16px;}
+.modal-title-area{flex:1;}
+.modal-meta{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px;}
+.modal-title{font-family:'Noto Serif KR',serif;font-size:20px;font-weight:700;color:var(--text);}
+.modal-close{width:36px;height:36px;border-radius:8px;border:1px solid var(--border);background:var(--bg3);color:var(--text2);font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s;}
+.modal-close:hover{background:var(--bg4);color:var(--text);}
+.modal-tabs{display:flex;border-bottom:1px solid var(--border);padding:0 28px;}
+.modal-tab{padding:12px 18px;border:none;background:transparent;color:var(--text2);font-size:14px;font-weight:500;cursor:pointer;transition:all .15s;border-bottom:2px solid transparent;margin-bottom:-1px;font-family:'Noto Sans KR',sans-serif;}
+.modal-tab.active{color:var(--accent);border-bottom-color:var(--accent);}
+.modal-tab:hover:not(.active){color:var(--text);}
+.modal-body{padding:28px;max-height:68vh;overflow-y:auto;}
+.tab-panel{display:none;}
+.tab-panel.active{display:block;}
+
+/* PROBLEM CONTENT */
+.problem-section{margin-bottom:22px;}
+.section-label{font-size:12px;font-weight:700;letter-spacing:.06em;color:var(--text3);text-transform:uppercase;margin-bottom:10px;display:flex;align-items:center;gap:8px;}
+.section-label::after{content:'';flex:1;height:1px;background:var(--border);}
+.sub-problem{background:var(--bg3);border:1px solid var(--border);border-left:3px solid var(--accent2);border-radius:0 var(--r-sm) var(--r-sm) 0;padding:14px 18px;margin-bottom:10px;}
+.sub-problem-num{font-size:12px;font-weight:700;color:var(--accent);margin-bottom:6px;}
+.sub-problem-text{font-size:14px;color:var(--text);line-height:1.9;}
+.answer-box{background:var(--bg);border:1px solid var(--border);border-radius:var(--r-sm);padding:18px 20px;position:relative;}
+.answer-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
+.answer-title{font-size:13px;font-weight:700;color:var(--gold);}
+.points-badge{font-size:12px;font-weight:600;background:rgba(251,191,36,.15);color:var(--gold);padding:3px 10px;border-radius:20px;}
+.answer-text{font-size:14px;color:var(--text2);line-height:1.9;}
+.scoring-item{display:flex;gap:10px;padding:8px 0;border-bottom:1px solid var(--border);}
+.scoring-item:last-child{border-bottom:none;}
+.scoring-pts{font-size:12px;font-weight:700;color:var(--green);background:rgba(52,211,153,.1);padding:2px 8px;border-radius:4px;white-space:nowrap;flex-shrink:0;height:fit-content;margin-top:2px;}
+.scoring-desc{font-size:13px;color:var(--text2);line-height:1.7;}
+.teacher-only-badge{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:var(--gold);background:rgba(251,191,36,.12);border:1px solid rgba(251,191,36,.25);padding:4px 12px;border-radius:20px;margin-bottom:16px;}
+.share-controls{display:flex;gap:10px;padding:16px 28px;border-top:1px solid var(--border);background:var(--bg);flex-wrap:wrap;}
+.share-btn{padding:8px 18px;border-radius:var(--r-sm);border:1px solid var(--border);background:var(--bg3);color:var(--text2);font-size:13px;font-weight:500;cursor:pointer;transition:all .15s;font-family:'Noto Sans KR',sans-serif;}
+.share-btn:hover{background:var(--bg4);color:var(--text);}
+.share-btn.primary{background:var(--accent2);color:#fff;border-color:var(--accent2);}
+.share-btn.primary:hover{background:var(--accent);}
+
+/* SIMILAR */
+.similar-grid{display:grid;gap:10px;}
+.similar-card{background:var(--bg3);border:1px solid var(--border);border-radius:var(--r-sm);padding:14px 16px;cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:12px;}
+.similar-card:hover{border-color:var(--accent2);background:var(--bg4);}
+.similar-icon{width:36px;height:36px;border-radius:8px;background:rgba(59,130,246,.15);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
+.similar-info{flex:1;}
+.similar-title{font-size:13px;font-weight:600;color:var(--text);margin-bottom:2px;}
+.similar-meta{font-size:12px;color:var(--text3);}
+
+/* STATS */
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:24px;}
+.stat-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:16px 18px;}
+.stat-num{font-size:26px;font-weight:700;color:var(--text);line-height:1;}
+.stat-label{font-size:12px;color:var(--text2);margin-top:5px;}
+.stat-icon{font-size:20px;margin-bottom:7px;}
+
+/* SECTION TITLES */
+.section-title{font-family:'Noto Serif KR',serif;font-size:22px;font-weight:700;color:var(--text);margin-bottom:4px;}
+.section-subtitle{font-size:13px;color:var(--text2);margin-bottom:22px;}
+.empty-state{text-align:center;padding:60px 20px;color:var(--text3);}
+.empty-icon{font-size:48px;margin-bottom:12px;}
+.notice{background:rgba(59,130,246,.08);border:1px solid rgba(59,130,246,.2);border-radius:var(--r-sm);padding:12px 16px;font-size:13px;color:var(--accent);margin-bottom:20px;display:flex;gap:8px;align-items:flex-start;}
+
+/* UNIV COLOR BAR */
+.univ-bar{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:20px;}
+.univ-pill{display:flex;align-items:center;gap:6px;padding:6px 14px;border-radius:20px;border:1px solid;font-size:13px;font-weight:500;cursor:pointer;transition:all .15s;}
+.univ-pill:hover{opacity:.8;}
+
+/* SEARCH */
+.search-wrap{margin-bottom:16px;}
+.search-input{width:100%;background:var(--bg2);border:1px solid var(--border);border-radius:var(--r-sm);color:var(--text);padding:10px 16px;font-size:14px;font-family:'Noto Sans KR',sans-serif;outline:none;transition:border-color .15s;}
+.search-input:focus{border-color:var(--accent2);}
+.search-input::placeholder{color:var(--text3);}
+
+@media(max-width:900px){.sidebar{width:220px;min-width:220px;}.content{padding:18px 16px;}.problem-grid{grid-template-columns:1fr;}}
+@media(max-width:680px){.header{padding:0 14px;}.header-tabs{display:none;}.main{flex-direction:column;}.sidebar{width:100%;min-width:unset;height:auto;position:static;flex-direction:row;flex-wrap:wrap;border-right:none;border-bottom:1px solid var(--border);padding:10px;overflow-x:auto;}.sidebar-section{margin-bottom:0;}.sidebar-label{display:none;}.sidebar-btn{white-space:nowrap;}.content{padding:14px;}.modal{border-radius:16px 16px 0 0;}.modal-body{max-height:60vh;}.share-controls{padding:12px 16px;}.stats-grid{grid-template-columns:repeat(2,1fr);}}
+::-webkit-scrollbar{width:5px;height:5px;}::-webkit-scrollbar-track{background:var(--bg);}::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+.fade-in{animation:fadeIn .3s ease both;}
+.katex{font-size:1em;}.katex-display{overflow-x:auto;padding:4px 0;}
+
+/* ===== PASSWORD MODAL ===== */
+.pw-overlay{position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.85);backdrop-filter:blur(10px);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .25s;}
+.pw-overlay.open{opacity:1;pointer-events:all;}
+.pw-box{background:var(--bg2);border:1px solid var(--border2);border-radius:20px;padding:40px 44px;width:380px;max-width:90vw;text-align:center;transform:scale(.92);transition:transform .25s;}
+.pw-overlay.open .pw-box{transform:scale(1);}
+.pw-icon{font-size:40px;margin-bottom:12px;}
+.pw-title{font-family:'Noto Serif KR',serif;font-size:20px;font-weight:700;color:var(--text);margin-bottom:6px;}
+.pw-sub{font-size:13px;color:var(--text3);margin-bottom:24px;}
+.pw-input-wrap{position:relative;margin-bottom:8px;}
+.pw-input{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:var(--r-sm);color:var(--text);padding:12px 44px 12px 16px;font-size:16px;letter-spacing:6px;text-align:center;outline:none;font-family:'JetBrains Mono',monospace;transition:border-color .2s;}
+.pw-input:focus{border-color:var(--gold);}
+.pw-input.error{border-color:var(--red);animation:shake .3s ease;}
+.pw-eye{position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--text3);cursor:pointer;font-size:16px;padding:4px;}
+.pw-err{font-size:12px;color:var(--red);margin-bottom:12px;min-height:18px;}
+.pw-btn{width:100%;padding:12px;background:var(--gold2);color:#111;border:none;border-radius:var(--r-sm);font-size:14px;font-weight:700;cursor:pointer;font-family:'Noto Sans KR',sans-serif;transition:all .2s;}
+.pw-btn:hover{background:var(--gold);transform:translateY(-1px);}
+.pw-cancel{margin-top:12px;background:none;border:none;color:var(--text3);font-size:13px;cursor:pointer;font-family:'Noto Sans KR',sans-serif;}
+.pw-cancel:hover{color:var(--text);}
+@keyframes shake{0%,100%{transform:translateX(0);}20%{transform:translateX(-6px);}40%{transform:translateX(6px);}60%{transform:translateX(-4px);}80%{transform:translateX(4px);}}
+
+/* ===== PRINT PANEL ===== */
+.print-panel-overlay{position:fixed;inset:0;z-index:300;background:rgba(0,0,0,.7);backdrop-filter:blur(6px);display:flex;align-items:stretch;justify-content:flex-end;opacity:0;pointer-events:none;transition:opacity .25s;}
+.print-panel-overlay.open{opacity:1;pointer-events:all;}
+.print-panel{width:440px;max-width:95vw;background:var(--bg2);border-left:1px solid var(--border2);display:flex;flex-direction:column;transform:translateX(100%);transition:transform .3s ease;}
+.print-panel-overlay.open .print-panel{transform:translateX(0);}
+.print-panel-header{padding:22px 24px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.print-panel-title{font-family:'Noto Serif KR',serif;font-size:18px;font-weight:700;color:var(--text);display:flex;align-items:center;gap:8px;}
+.print-panel-close{width:32px;height:32px;border-radius:8px;border:1px solid var(--border);background:var(--bg3);color:var(--text2);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+.print-panel-close:hover{background:var(--bg4);}
+.print-panel-body{flex:1;overflow-y:auto;padding:16px 24px;}
+.print-section-label{font-size:11px;font-weight:700;letter-spacing:.07em;color:var(--text3);text-transform:uppercase;margin:12px 0 8px;display:flex;align-items:center;gap:8px;}
+.print-section-label::after{content:'';flex:1;height:1px;background:var(--border);}
+.print-q-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:var(--r-sm);border:1px solid var(--border);background:var(--bg3);margin-bottom:8px;cursor:pointer;transition:all .15s;}
+.print-q-item:hover{border-color:var(--border2);background:var(--bg4);}
+.print-q-item.selected{border-color:var(--accent2);background:rgba(59,130,246,.1);}
+.print-q-check{width:18px;height:18px;border-radius:4px;border:2px solid var(--border2);background:transparent;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s;}
+.print-q-item.selected .print-q-check{background:var(--accent2);border-color:var(--accent2);}
+.print-q-check svg{display:none;}
+.print-q-item.selected .print-q-check svg{display:block;}
+.print-q-info{flex:1;min-width:0;}
+.print-q-title{font-size:13px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.print-q-meta{font-size:11px;color:var(--text3);margin-top:2px;}
+.print-q-remove{width:24px;height:24px;border:none;background:none;color:var(--text3);cursor:pointer;font-size:16px;border-radius:4px;display:flex;align-items:center;justify-content:center;}
+.print-q-remove:hover{background:rgba(248,113,113,.15);color:var(--red);}
+.print-panel-footer{padding:16px 24px;border-top:1px solid var(--border);display:flex;flex-direction:column;gap:10px;}
+.print-count-bar{display:flex;align-items:center;justify-content:space-between;}
+.print-count{font-size:13px;color:var(--text2);}
+.print-count strong{color:var(--accent);}
+.print-options{display:flex;gap:8px;flex-wrap:wrap;}
+.print-opt-label{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text2);cursor:pointer;}
+.print-opt-label input[type=checkbox]{accent-color:var(--accent2);width:14px;height:14px;}
+.print-actions{display:flex;gap:8px;}
+.print-go-btn{flex:1;padding:11px;background:var(--accent2);color:#fff;border:none;border-radius:var(--r-sm);font-size:14px;font-weight:700;cursor:pointer;font-family:'Noto Sans KR',sans-serif;transition:all .2s;}
+.print-go-btn:hover{background:var(--accent);}
+.print-go-btn:disabled{background:var(--bg4);color:var(--text3);cursor:not-allowed;}
+.print-clear-btn{padding:11px 16px;background:transparent;border:1px solid var(--border);color:var(--text2);border-radius:var(--r-sm);font-size:13px;cursor:pointer;font-family:'Noto Sans KR',sans-serif;}
+.print-clear-btn:hover{background:var(--bg3);}
+
+/* ===== PRINT BUTTON FLOATING ===== */
+.print-fab{position:fixed;bottom:28px;right:28px;z-index:150;background:var(--accent2);color:#fff;border:none;border-radius:50px;padding:12px 20px;font-size:14px;font-weight:700;cursor:pointer;font-family:'Noto Sans KR',sans-serif;display:flex;align-items:center;gap:8px;box-shadow:0 4px 20px rgba(59,130,246,.4);transition:all .2s;}
+.print-fab:hover{background:var(--accent);transform:translateY(-2px);box-shadow:0 6px 28px rgba(59,130,246,.5);}
+.print-fab-badge{background:var(--gold);color:#111;border-radius:10px;padding:1px 7px;font-size:11px;font-weight:800;min-width:18px;text-align:center;}
+
+/* ===== CARD CHECKBOX MODE ===== */
+.problem-card .card-select-check{position:absolute;top:12px;right:12px;width:22px;height:22px;border-radius:6px;border:2px solid var(--border2);background:var(--bg3);display:none;align-items:center;justify-content:center;cursor:pointer;transition:all .15s;z-index:2;}
+.select-mode .problem-card .card-select-check{display:flex;}
+.problem-card.card-selected{border-color:var(--accent2);background:rgba(59,130,246,.06);}
+.problem-card.card-selected .card-select-check{background:var(--accent2);border-color:var(--accent2);}
+.select-mode .problem-card{cursor:default;}
+.select-mode .problem-card:hover{transform:none;}
+.select-toggle-btn{padding:8px 16px;background:var(--bg3);border:1px solid var(--border);color:var(--text2);border-radius:var(--r-sm);font-size:13px;font-weight:500;cursor:pointer;font-family:'Noto Sans KR',sans-serif;transition:all .15s;display:flex;align-items:center;gap:6px;}
+.select-toggle-btn.active{background:rgba(59,130,246,.15);border-color:var(--accent2);color:var(--accent);}
+.select-toggle-btn:hover:not(.active){background:var(--bg4);}
+.toolbar{display:flex;align-items:center;gap:8px;margin-bottom:16px;}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <a class="logo" href="#">
+    <div class="logo-icon">&#8747;</div>
+    수리논술 PLATFORM
+  </a>
+  <div class="header-tabs">
+    <button class="header-tab active" id="tab-student" onclick="switchMainTab('student',this)">학생 모드</button>
+    <button class="header-tab" id="tab-teacher" onclick="openPwModal()">교사 모드</button>
+  </div>
+</header>
+
+<div class="main">
+  <!-- SIDEBAR -->
+  <nav class="sidebar" id="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-label">보기</div>
+      <button class="sidebar-btn active" onclick="showView('all',this)">
+        &#128218; <span>전체 문제</span><span class="badge" id="totalBadge">0</span>
+      </button>
+      <button class="sidebar-btn" onclick="showView('similar',this)">
+        &#128257; <span>유사&#183;예상</span>
+      </button>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">대학별</div>
+      <button class="sidebar-btn" onclick="filterByUniv('성균관대',this)">&#127963; 성균관대<span class="badge" id="b-skku">0</span></button>
+      <button class="sidebar-btn" onclick="filterByUniv('경희대',this)">&#127891; 경희대<span class="badge" id="b-khu">0</span></button>
+      <button class="sidebar-btn" onclick="filterByUniv('건국대',this)">&#127979; 건국대<span class="badge" id="b-kku">0</span></button>
+      <button class="sidebar-btn" onclick="filterByUniv('중앙대',this)">&#127968; 중앙대<span class="badge" id="b-cau">0</span></button>
+      <button class="sidebar-btn" onclick="filterByUniv('나침반',this)">&#128205; 나침반<span class="badge" id="b-nav">0</span></button>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">단원</div>
+      <button class="sidebar-btn" onclick="filterByTopic('미적분',this)">&#128200; 미적분</button>
+      <button class="sidebar-btn" onclick="filterByTopic('수열',this)">&#128290; 수열&#183;등비</button>
+      <button class="sidebar-btn" onclick="filterByTopic('확률통계',this)">&#127922; 확률&#183;통계</button>
+      <button class="sidebar-btn" onclick="filterByTopic('기하',this)">&#128208; 기하&#183;벡터</button>
+      <button class="sidebar-btn" onclick="filterByTopic('이차곡선',this)">&#127768; 이차곡선</button>
+      <button class="sidebar-btn" onclick="filterByTopic('삼각함수',this)">〰 삼각함수</button>
+      <button class="sidebar-btn" onclick="filterByTopic('로그',this)">&#128291; 지수&#183;로그</button>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">난이도</div>
+      <button class="sidebar-btn" onclick="filterByDiff('하',this)">&#128994; 하</button>
+      <button class="sidebar-btn" onclick="filterByDiff('중',this)">&#128993; 중</button>
+      <button class="sidebar-btn" onclick="filterByDiff('상',this)">&#128308; 상</button>
+      <button class="sidebar-btn" onclick="filterByDiff('최상',this)">&#128995; 최상</button>
+    </div>
+  </nav>
+
+  <main class="content" id="content">
+    <!-- STUDENT VIEW -->
+    <div id="studentView">
+      <div class="stats-grid" id="statsGrid"></div>
+      <div class="search-wrap">
+        <input class="search-input" id="searchInput" placeholder="&#128269; 문제 제목, 단원, 대학 검색..." oninput="applyFilters()">
+      </div>
+      <div class="filter-bar">
+        <div class="filter-group">
+          <span class="filter-label">대학교</span>
+          <select class="filter-select" id="f-univ" onchange="applyFilters()">
+            <option value="">전체</option>
+            <option value="성균관대">성균관대</option>
+            <option value="경희대">경희대</option>
+            <option value="건국대">건국대</option>
+            <option value="중앙대">중앙대</option>
+            <option value="나침반">나침반</option>
+            <option value="예상문제">예상문제</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <span class="filter-label">연도</span>
+          <select class="filter-select" id="f-year" onchange="applyFilters()">
+            <option value="">전체</option>
+            <option value="2026">2026학년도</option>
+            <option value="2025">2025학년도</option>
+            <option value="2024">2024학년도</option>
+            <option value="2023">2023학년도</option>
+            <option value="2021">2021학년도</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <span class="filter-label">단원</span>
+          <select class="filter-select" id="f-topic" onchange="applyFilters()">
+            <option value="">전체</option>
+            <option value="미적분">미적분</option>
+            <option value="수열">수열&#183;등비</option>
+            <option value="확률통계">확률&#183;통계</option>
+            <option value="기하">기하&#183;벡터</option>
+            <option value="이차곡선">이차곡선</option>
+            <option value="삼각함수">삼각함수</option>
+            <option value="로그">지수&#183;로그</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <span class="filter-label">난이도</span>
+          <select class="filter-select" id="f-diff" onchange="applyFilters()">
+            <option value="">전체</option>
+            <option value="하">하</option>
+            <option value="중">중</option>
+            <option value="상">상</option>
+            <option value="최상">최상</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <span class="filter-label">유형</span>
+          <select class="filter-select" id="f-type" onchange="applyFilters()">
+            <option value="">전체</option>
+            <option value="기출">기출문제</option>
+            <option value="모의">모의논술</option>
+            <option value="유사">유사&#183;예상</option>
+          </select>
+        </div>
+        <button class="filter-btn" onclick="resetFilters()">초기화</button>
+      </div>
+      <div class="toolbar">
+        <div>
+          <div class="section-title" id="viewTitle">전체 문제</div>
+          <div class="section-subtitle" id="viewCount">불러오는 중...</div>
+        </div>
+        <button class="select-toggle-btn" id="selectToggleBtn" onclick="toggleSelectMode()" style="margin-left:auto;">
+          &#9745; 문제 선택
+        </button>
+        <button class="select-toggle-btn" id="selectAllBtn" onclick="selectAllVisible()" style="display:none;">전체 선택</button>
+      </div>
+      <div class="problem-grid" id="problemGrid"></div>
+      <div class="empty-state" id="emptyState" style="display:none;">
+        <div class="empty-icon">&#128269;</div>
+        <div>조건에 맞는 문제가 없습니다.</div>
+      </div>
+    </div>
+
+    <!-- TEACHER VIEW -->
+    <div id="teacherView" style="display:none;">
+      <div class="notice">&#128161; <span><b>교사 모드</b>: 채점기준&#183;모범답안 확인, 학생 공개 여부 설정 가능합니다.</span></div>
+      <div class="section-title">교사 대시보드</div>
+      <div class="section-subtitle">문제를 클릭하여 모범답안 및 채점기준을 확인하세요.</div>
+      <div class="stats-grid" id="teacherStatsGrid"></div>
+      <div class="problem-grid" id="teacherProblemGrid"></div>
+    </div>
+  </main>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModalOnBg(event)">
+  <div class="modal" id="modal">
+    <div class="modal-header">
+      <div class="modal-title-area">
+        <div class="modal-meta" id="modalMeta"></div>
+        <div class="modal-title" id="modalTitle"></div>
+      </div>
+      <button class="modal-close" onclick="closeModal()">&#215;</button>
+    </div>
+    <div class="modal-tabs" id="modalTabs">
+      <button class="modal-tab active" onclick="switchModalTab('problem',this)">문제</button>
+      <button class="modal-tab" onclick="switchModalTab('hint',this)">힌트</button>
+      <button class="modal-tab" id="answerTab" onclick="switchModalTab('answer',this)">모범답안</button>
+      <button class="modal-tab" onclick="switchModalTab('similar',this)">유사문제</button>
+    </div>
+    <div class="modal-body">
+      <div class="tab-panel active" id="panel-problem"></div>
+      <div class="tab-panel" id="panel-hint"></div>
+      <div class="tab-panel" id="panel-answer"></div>
+      <div class="tab-panel" id="panel-similar"></div>
+    </div>
+    <div class="share-controls" id="shareControls"></div>
+  </div>
+</div>
+
+<!-- ===== PASSWORD MODAL ===== -->
+<div class="pw-overlay" id="pwOverlay">
+  <div class="pw-box">
+    <div class="pw-icon">🔐</div>
+    <div class="pw-title">교사 모드 접근</div>
+    <div class="pw-sub">채점기준·모범답안 열람 권한이 필요합니다.</div>
+    <div class="pw-input-wrap">
+      <input class="pw-input" id="pwInput" type="password" maxlength="10" placeholder="비밀번호 입력"
+        onkeydown="if(event.key==='Enter')checkPw()">
+      <button class="pw-eye" id="pwEye" onclick="togglePwEye()">👁</button>
+    </div>
+    <div class="pw-err" id="pwErr"></div>
+    <button class="pw-btn" onclick="checkPw()">확인</button>
+    <br>
+    <button class="pw-cancel" onclick="closePwModal()">취소</button>
+  </div>
+</div>
+
+<!-- ===== PRINT PANEL ===== -->
+<div class="print-panel-overlay" id="printPanelOverlay" onclick="closePrintPanel(event)">
+  <div class="print-panel" id="printPanel">
+    <div class="print-panel-header">
+      <div class="print-panel-title">🖨 인쇄 문제 목록</div>
+      <button class="print-panel-close" onclick="closePrintPanelDirect()">×</button>
+    </div>
+    <div class="print-panel-body" id="printPanelBody">
+      <div style="text-align:center;padding:40px 0;color:var(--text3);">
+        <div style="font-size:36px;margin-bottom:10px;">📋</div>
+        <div style="font-size:14px;">문제를 선택하면 여기에 추가됩니다.</div>
+        <div style="font-size:12px;margin-top:6px;color:var(--text3);">"문제 선택" 버튼을 눌러 시작하세요.</div>
+      </div>
+    </div>
+    <div class="print-panel-footer">
+      <div class="print-count-bar">
+        <span class="print-count">선택된 문제: <strong id="printCountNum">0</strong>개</span>
+        <button class="print-clear-btn" onclick="clearPrintList()" style="padding:5px 12px;font-size:12px;">전체 해제</button>
+      </div>
+      <div class="print-options">
+        <label class="print-opt-label"><input type="checkbox" id="opt-answer" checked> 모범답안 포함</label>
+        <label class="print-opt-label"><input type="checkbox" id="opt-scoring"> 채점기준 포함</label>
+        <label class="print-opt-label"><input type="checkbox" id="opt-hint"> 힌트 포함</label>
+        <label class="print-opt-label"><input type="checkbox" id="opt-pagebreak" checked> 문제마다 페이지 분리</label>
+      </div>
+      <div class="print-actions">
+        <button class="print-go-btn" id="printGoBtn" onclick="doPrint()" disabled>🖨 인쇄하기</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== FAB ===== -->
+<button class="print-fab" id="printFab" onclick="openPrintPanel()" style="display:none;">
+  🖨 인쇄 <span class="print-fab-badge" id="fabBadge">0</span>
+</button>
+
+<script>
+/* ===== DATA ===== */
+const PROBLEMS = [
+
+/* ======= 성균관대 2024 기출 ======= */
+{id:'skku-2024-nat-1',univ:'성균관대',year:'2024',kind:'기출',exam:'자연계 1교시',title:'접선의 방정식과 최솟값',topics:['미적분','이차곡선'],diff:'상',
+desc:'미분가능한 함수와 이차곡선에 대하여 접선, 수직선, 최솟값 등을 구하는 복합 문제',
+subproblems:[
+  {num:'1-i',text:'실수 전체에서 미분가능한 함수 f(x)에 대해 곡선 y=f(x) 위의 점 중 P까지 거리가 최소인 Q에서의 접선이 직선 PQ에 수직인 이유를 논하시오. (10점)',pts:10},
+  {num:'1-ii',text:'미분가능한 두 함수 g(x), h(x)에 대해 y=g(x)와 y=h(x)가 만나지 않을 때, 최소거리 Q,R에서 접선이 모두 직선 QR에 수직인 이유를 논하시오. (10점)',pts:10},
+  {num:'1-iii',text:'제시문의 네 점 A,B,C,D에 대해 AB+BC+CD가 최소일 때, D의 x좌표와 A의 y좌표의 차가 6. A와 D의 좌표를 구하시오. (10점)',pts:10},
+],
+hint:'최솟값 조건에서 거리함수를 미분하면 접선의 수직성이 도출됩니다. i→ii→iii 순서로 논리를 쌓으세요.',
+answer:'[1-i] D(x)=sqrt((x-px)^2+(f(x)-py)^2), D\'(x)=0\n=> (x-px)+(f(x)-py)f\'(x)=0\n=> 벡터 PQ와 접선방향 (1,f\'(x))의 내적=0, 즉 PQ ⊥ 접선.\n\n[1-ii] Q,R 모두 동일 논리 적용 => QR ⊥ 두 접선.\n\n[1-iii] 조건 설정 후 연립으로 A,D 좌표 도출.',
+scoring:[{pts:'10점',desc:'거리함수 미분으로 수직성 증명'},{pts:'10점',desc:'두 곡선 경우 논증'},{pts:'10점',desc:'A, D 좌표 계산'}],
+related:['skku-2024-nat-2','skku-2026-mock-2'],answerPublic:false},
+
+{id:'skku-2024-nat-2',univ:'성균관대',year:'2024',kind:'기출',exam:'자연계 1교시',title:'이차함수와 평행사변형 넓이',topics:['미적분','이차곡선'],diff:'상',
+desc:'평행인 두 직선과 이차함수 y=x²의 교점으로 만든 사각형 ABCD 분석',
+subproblems:[
+  {num:'2-i',text:'PM1=5, PM2=1일 때 사각형 ABCD의 넓이를 구하시오. (10점)',pts:10},
+  {num:'2-ii',text:'r=4일 때 사다리꼴의 넓이를 모두 구하시오. (10점)',pts:10},
+  {num:'2-iii',text:'양의 정수 m,n에 대해 조건을 만족하는 순서쌍 (m,n)의 개수를 구하시오. (20점)',pts:20},
+],
+hint:'등변사다리꼴 성질 먼저 확인. y=x²의 대칭성 활용.',
+answer:'[2-i] 넓이 = 48√26\n[2-ii] r=4: 사다리꼴 넓이 6√2, 10√2\n[2-iii] m,n 조건 분석 → 경우 수 산정',
+scoring:[{pts:'10점',desc:'p값 결정 및 넓이'},{pts:'10점',desc:'두 경우 넓이'},{pts:'20점',desc:'(m,n) 경우의 수'}],
+related:['skku-2024-nat-1','skku-2025-mock-2'],answerPublic:false},
+
+{id:'skku-2024-nat2-1',univ:'성균관대',year:'2024',kind:'기출',exam:'자연계 2교시',title:'극값·극한 (샌드위치 정리 응용)',topics:['미적분'],diff:'최상',
+desc:'A(x)≤f(x)≤B(x) 조건에서 극값·극한 분석. 샌드위치 정리와 미분의 정의 논리 서술',
+subproblems:[
+  {num:'1-i',text:'0<x<3.5인 모든 x에 대해 g(x)≤f(x)가 성립하는 이유를 논하시오. (10점)',pts:10},
+  {num:'1-ii',text:'f(1)=8일 때, f\'(1)의 값을 구하고 이유를 논하시오. (10점)',pts:10},
+  {num:'1-iii',text:'극한 lim_{h→0}[f(a+3h)-g(a+5h)]/h가 존재할 때 a의 값과 극한값을 구하시오. (10점)',pts:10},
+  {num:'1-iv',text:'극한 lim_{h→0}[f(b+4h)-g(b-3h)-22]/h가 존재할 때 b의 값과 극한값을 모두 구하시오. (10점)',pts:10},
+],
+hint:'A=B인 점에서는 샌드위치로 f의 미분 결정. 극한 존재 조건에서 분모→0이면 분자도 0이어야 함.',
+answer:'[1-ii] f(1)=A(1)=B(1)=8 → 샌드위치 정리 → f\'(1)=A\'(1)=-1\n[1-iii] 극한=3f\'(a)-5g\'(a). a=1일 때 극한값=-28\n[1-iv] 4f\'(b)+3g\'(b) 조건 분석 → b=1 또는 b=3',
+scoring:[{pts:'10점',desc:'대소 관계 논증'},{pts:'10점',desc:'f\'(1)=-1 샌드위치'},{pts:'10점',desc:'a값과 극한값'},{pts:'10점',desc:'b의 모든 값'}],
+related:['skku-2025-mock-2','khu-2023-nat2-2'],answerPublic:false},
+
+/* ======= 성균관대 2025 모의 ======= */
+{id:'skku-2025-mock-1',univ:'성균관대',year:'2025',kind:'모의',exam:'수리논술 모의',title:'집합의 원소쌍 합과 등차수열',topics:['수열'],diff:'중',
+desc:'n개의 서로 다른 양의 정수 집합에서 두 원소의 합 C(n,2)개가 등차수열을 이룰 조건 탐구',
+subproblems:[
+  {num:'1-i',text:'n=4일 때 등차수열의 합이 60이 되는 집합 S의 개수를 구하시오. (10점)',pts:10},
+  {num:'1-ii',text:'n=5일 때 등차수열의 합이 80이 되는 집합 S의 개수를 구하시오. (10점)',pts:10},
+  {num:'1-iii',text:'n≥6일 때 조건을 만족하는 집합 S가 존재하지 않음을 보이시오. (10점)',pts:10},
+],
+hint:'합의 최솟값=a₁+a₂, 최댓값=a_{n-1}+a_n. 등차수열 합=항수×(최솟값+최댓값)/2 활용.',
+answer:'[1-i] 원소합=20 → {1,2,8,9},{1,3,7,9},{2,3,6,9}... → 4가지\n[1-ii] 원소합=20 → 2가지\n[1-iii] n≥6: C(n,2)개 합의 등차수열 성립 불가 증명',
+scoring:[{pts:'5점',desc:'n=4 조건'},{pts:'5점',desc:'집합 열거'},{pts:'5점',desc:'n=5 조건'},{pts:'5점',desc:'가능한 집합'},{pts:'10점',desc:'n≥6 불가 증명'}],
+related:['skku-2026-mock-1'],answerPublic:false},
+
+{id:'skku-2025-mock-2',univ:'성균관대',year:'2025',kind:'모의',exam:'수리논술 모의',title:'이차함수와 직선 교점 분석',topics:['미적분','이차곡선'],diff:'상',
+desc:'이차함수 y=x²/(c²-1)과 직선 y=cx의 교점, 중점, 넓이의 비를 단계별 탐구',
+subproblems:[
+  {num:'2-i',text:'교점이 1개일 때 두 점 P₁,P₂의 중점과 Q(0,0) 잇는 직선이 y축과 만나지 않는 c값을 구하시오. (10점)',pts:10},
+  {num:'2-ii',text:'교점이 2개이고 -1<c<1일 때, R_c가 될 수 없는 점들의 선분 길이를 구하시오. (10점)',pts:10},
+  {num:'2-iii',text:'c=0.5일 때 삼각형 PTB가 이차곡선으로 나뉜 두 영역의 넓이 비를 구하시오. (10점)',pts:10},
+],
+hint:'교점 조건은 판별식 D. 중점 x=(x₁+x₂)/2 활용. 넓이 비는 정적분.',
+answer:'[2-i] c=0\n[2-ii] 선분 길이: 1/2\n[2-iii] c=0.5 → 넓이 비 = 1:2',
+scoring:[{pts:'10점',desc:'c=0 도출'},{pts:'10점',desc:'선분 길이'},{pts:'10점',desc:'넓이 비 계산'}],
+related:['skku-2025-mock-1','skku-2024-nat-1'],answerPublic:false},
+
+{id:'skku-2025-mock-3',univ:'성균관대',year:'2025',kind:'모의',exam:'수리논술 모의',title:'정삼각형과 원의 교점 개수 함수',topics:['기하','이차곡선'],diff:'최상',
+desc:'정삼각형 ABC와 원 O_r의 교점 개수 함수 f,g,h를 분석. 각 함수 범위 탐구',
+subproblems:[
+  {num:'3-i',text:'f(r)≥1이기 위한 r의 범위를 논하시오. (10점)',pts:10},
+  {num:'3-ii',text:'f(r)=1인 r>0 중 가장 작은 r₀를 구하고, r₀를 근으로 하는 정수계수 삼차다항식을 구하시오. (10점)',pts:10},
+  {num:'3-iii',text:'g(r)≥1이기 위한 r의 범위를 논하시오. (10점)',pts:10},
+  {num:'3-iv',text:'h(r)≥1이기 위한 r의 범위를 r₀로 표현하시오. (10점)',pts:10},
+],
+hint:'원의 중심에서 각 꼭짓점/변까지 거리와 r 비교. 대칭성 최대 활용.',
+answer:'[3-i] r>0 전 범위에서 f(r)≥1\n[3-ii] r₀=1/√3 관련, 삼차식 x³-3x+1=0 등\n[3-iii] 선분 AC 분석 (유사)\n[3-iv] r₀로 표현',
+scoring:[{pts:'10점',desc:'원-선분 거리 비교'},{pts:'10점',desc:'r₀ 및 삼차식'},{pts:'10점',desc:'g(r) 분석'},{pts:'10점',desc:'h(r) 범위'}],
+related:['skku-2025-mock-1','skku-2026-mock-2'],answerPublic:false},
+
+/* ======= 성균관대 2026 모의 ======= */
+{id:'skku-2026-mock-1',univ:'성균관대',year:'2026',kind:'모의',exam:'수리논술 모의',title:'로그와 등차수열 (약수의 로그합)',topics:['로그','수열'],diff:'중',
+desc:'매우 큰 수의 약수에 특정 밑의 로그를 취해 얻은 집합의 원소합을 구하는 문제. 등차수열 활용.',
+subproblems:[
+  {num:'1-i',text:'N=2^20의 약수들에 log₂를 취한 집합 A의 원소합 S_A를 소인수분해하고 이유를 논하시오. (10점)',pts:10},
+  {num:'1-ii',text:'N=2^20·3^10의 약수들에 log₂를 취한 집합 B의 원소합 S_B가 자연수임을 보이고 소인수분해하시오. (10점)',pts:10},
+  {num:'1-iii',text:'N=2^20·3^10의 짝수인 약수에 log₂, 홀수인 약수에 log₂를 취해 가중치를 적용한 합을 구하시오. (10점)',pts:10},
+],
+hint:'약수 2^a·3^b의 log₂값 = a+b·log₂3. 등차수열 합 공식으로 계산.',
+answer:'[1-i] 약수: 2^0,...,2^20 → log₂값 0,1,...,20\nS_A = 0+1+...+20 = 210 = 2×3×5×7\n\n[1-ii] S_B = Σ_{a=0}^{20}Σ_{b=0}^{10}(a+b·log₂3)\n= 11×210+21×55·log₂3 = 2310+1155log₂3\n2310 = 2×3×5×7×11\n\n[1-iii] 짝수(a≥1)/홀수(a=0) 분리 후 합산',
+scoring:[{pts:'5점',desc:'집합 구성'},{pts:'5점',desc:'S_A=210 계산'},{pts:'5점',desc:'이중 합산'},{pts:'5점',desc:'S_B 소인수분해'},{pts:'10점',desc:'짝수/홀수 분리'}],
+related:['skku-2025-mock-1','skku-2026-mock-2'],answerPublic:false},
+
+{id:'skku-2026-mock-2',univ:'성균관대',year:'2026',kind:'모의',exam:'수리논술 모의',title:'사각형 ABGH와 삼각형 AEF 넓이 최댓값',topics:['기하','미적분'],diff:'상',
+desc:'좌표평면 사각형 종이를 접을 때 이동한 점 E의 궤적. 넓이 최댓값과 호의 길이 계산.',
+subproblems:[
+  {num:'2-i',text:'삼각형 FBG≅FEG 합동 이용하여 사각형 ABGH 넓이를 네 삼각형 합으로 표현 후 b를 a에 대한 식으로 나타내시오. (10점)',pts:10},
+  {num:'2-ii',text:'점 E가 선분 AD 위일 때 삼각형 AEF 넓이의 최댓값을 구하시오. (10점)',pts:10},
+  {num:'2-iii',text:'θ=arctan(17/a)를 예각으로 놓고, 점 G가 G₀에서 C까지 움직일 때 E가 그리는 호의 길이를 θ에 대한 식으로 구하시오. (15점)',pts:15},
+],
+hint:'삼각형 합동으로 넓이 단순화. 넓이의 제곱 미분으로 최댓값. 호 길이=반지름×중심각.',
+answer:'[2-i] △FBG≅△FEG → 사각형 넓이 = 3a²\nb = a²/(조건) 유도\n\n[2-ii] △AEF 넓이² = S(a), S\'(a)=0 → 최댓값 = 81/2\n\n[2-iii] G=G₀일 때 ∠EFB=π/3, G=C일 때 ∠EFB=2θ\n중심각 = 2θ-π/3\n호의 길이 = a·(2θ-π/3)',
+scoring:[{pts:'7점',desc:'넓이 합 표현'},{pts:'3점',desc:'b를 a로 표현'},{pts:'10점',desc:'최댓값 81/2'},{pts:'15점',desc:'호의 길이 계산'}],
+related:['skku-2026-mock-1','skku-2025-mock-3'],answerPublic:false},
+
+{id:'skku-2026-mock-3',univ:'성균관대',year:'2026',kind:'모의',exam:'수리논술 모의',title:'이차함수 내분점과 접선의 넓이',topics:['미적분'],diff:'중',
+desc:'이차곡선 y=x² 위 두 점 P₁,P₂를 내분하는 점 M과 접선을 이용한 넓이 계산',
+subproblems:[
+  {num:'3-i',text:'P₁P₂=6, 1:1 내분점 M이 x축 위일 때 선분 PP₁과 이차함수의 도형 넓이를 구하시오. (10점)',pts:10},
+  {num:'3-ii',text:'점 M 좌표가 (t,t²)일 때 직선 PP₁의 기울기 m이 0≤m≤(n+1)/n을 만족하는 t의 범위를 구하시오. (10점)',pts:10},
+  {num:'3-iii',text:'n=1이고 (n+1)/2≤m≤n+1일 때 선분 PP₁ 위의 점들로 이루어진 도형 넓이를 구하시오. (15점)',pts:15},
+],
+hint:'내분점 M의 좌표 매개변수 표현. 정적분으로 넓이. 접선 관계는 판별식 D=0.',
+answer:'[3-i] P₁=(-1,1), P₂=(1,1), M=(0,0), y=1\n넓이 = ∫_{-1}^{1}(1-x²)dx = 4/3\n\n[3-ii] 1/4 ≤ t의 범위 ≤ ...\n\n[3-iii] 접선 관계 활용 → 넓이 = 1/(2(n+1))',
+scoring:[{pts:'5점',desc:'P₁,P₂ 좌표'},{pts:'5점',desc:'넓이 4/3'},{pts:'10점',desc:'증감표 및 범위'},{pts:'15점',desc:'접선 증명 및 넓이'}],
+related:['skku-2026-mock-1'],answerPublic:false},
+
+/* ======= 경희대 2025 기출 ======= */
+{id:'khu-2025-nat-1',univ:'경희대',year:'2025',kind:'기출',exam:'자연계 오전',title:'벡터 내적과 원·정사각형 도형',topics:['기하'],diff:'상',
+desc:'정사각형에 내접하는 원 O₁, 정삼각형 PQR, 접하는 원 O₂에 대한 복합 기하 문제',
+subproblems:[
+  {num:'I-(1)',text:'선분 O₁O₂의 길이를 구하시오. (14점)',pts:14},
+  {num:'I-(2)',text:'원 O₂ 위의 점 X에 대하여 벡터 QR·벡터 PX의 최댓값을 구하시오. (16점)',pts:16},
+],
+hint:'O₁O₂는 두 원 중심 거리. 내접·접선 조건으로 좌표 설정. 내적 최댓값은 QR 방향 투영 최대인 X.',
+answer:'[I-(1)] O₁O₂ = 2√3-1 (계산 결과)\n[I-(2)] QR⃗·PX⃗ 분해 후 최댓값 = 4√3',
+scoring:[{pts:'6점',desc:'r₂ 계산'},{pts:'8점',desc:'O₁O₂ 거리'},{pts:'8점',desc:'내적 최대 조건'},{pts:'8점',desc:'최댓값 계산'}],
+related:['khu-2025-nat-2','khu-2024-nat-1'],answerPublic:false},
+
+{id:'khu-2025-nat-2',univ:'경희대',year:'2025',kind:'기출',exam:'자연계 오전',title:'막대 내분점과 매개변수 곡선',topics:['기하','이차곡선'],diff:'상',
+desc:'길이 5인 막대의 끝 P가 x축 이동시 내분점 Q의 경로에서 R의 곡선 방정식 도출',
+subproblems:[
+  {num:'II-(1)',text:'P가 x축 이동시 Q가 y=√(4-x²) 위를 이동하면 R의 곡선 f(x)를 구하시오. (15점)',pts:15},
+  {num:'II-(2)',text:'y=f(x)와 y=5-x²/a의 서로 다른 교점이 2개 이상인 양수 a의 범위를 구하시오. (18점)',pts:18},
+],
+hint:'Q=(t,√(4-t²)), PQ:QR=2:3이므로 외분점 공식으로 R 좌표 표현.',
+answer:'[II-(1)] f(x)=5√(1-x²/25) (타원 상반부, -5≤x≤5)\n[II-(2)] 5/4 ≤ a < 5',
+scoring:[{pts:'5점',desc:'Q 좌표'},{pts:'5점',desc:'외분점 R 계산'},{pts:'5점',desc:'f(x) 도출'},{pts:'7점',desc:'교점 이차방정식'},{pts:'6점',desc:'a 범위'},{pts:'5점',desc:'교점 개수 확인'}],
+related:['khu-2025-nat-3','khu-2024-nat-1'],answerPublic:false},
+
+{id:'khu-2025-nat-3',univ:'경희대',year:'2025',kind:'기출',exam:'자연계 오전',title:'등비급수와 삼각함수 최댓값',topics:['수열','삼각함수'],diff:'최상',
+desc:'좌표평면 수열에서 OP₅를 α,β로 표현, 등비급수 합의 최댓값 탐구',
+subproblems:[
+  {num:'III-(1)',text:'OP₅=A·sin(α+B)·sinα·cos(β+C)·cosβ 형태로 표현할 때 A,B,C를 구하시오. (16점)',pts:16},
+  {num:'III-(2)',text:'β=π/6일 때 OP₁+OP₅+OP₉+...의 합 f(α)의 최댓값을 구하시오. (21점)',pts:21},
+],
+hint:'사인법칙 반복 적용으로 OP₅ 도출. β=π/6 대입 후 등비급수 조건 확인.',
+answer:'[III-(1)] A=4, B=π/3, C=-π/6\n[III-(2)] f(α) 최댓값 = 3 (α=π/6에서)',
+scoring:[{pts:'10점',desc:'사인법칙 적용'},{pts:'6점',desc:'A,B,C 결정'},{pts:'7점',desc:'등비급수 합'},{pts:'7점',desc:'증감표'},{pts:'7점',desc:'최댓값'}],
+related:['khu-2024-nat-1'],answerPublic:false},
+
+/* ======= 경희대 2024 기출 ======= */
+{id:'khu-2024-nat-1',univ:'경희대',year:'2024',kind:'기출',exam:'자연계 수시',title:'쌍곡선 접선·직각삼각형 반복과 등비급수',topics:['이차곡선','수열'],diff:'상',
+desc:'쌍곡선 x²-y²=b의 접선과 직각삼각형 반복 생성. 각 사분면별 넓이 합 A₁~A₄ 비교.',
+subproblems:[
+  {num:'I-(1)',text:'P₁(8,0), Q₁(0,4)의 수직이등분선이 쌍곡선 x²-y²=b에 접할 때 b를 구하시오. (12점)',pts:12},
+  {num:'I-(2)',text:'"A₁은 A₂+A₃+A₄보다 크다"는 명제의 참·거짓을 판별하시오. (18점)',pts:18},
+],
+hint:'수직이등분선 y=2x-6이 쌍곡선에 접하는 조건: 판별식=0. 닮음비로 공비 탐색.',
+answer:'[I-(1)] b=12\n[I-(2)] S₁=16<S₂+S₃+S₄=9+81/16+729/256\n→ A₁<A₂+A₃+A₄ → 거짓',
+scoring:[{pts:'6점',desc:'수직이등분선 방정식'},{pts:'6점',desc:'b=12'},{pts:'9점',desc:'각 넓이 계산'},{pts:'9점',desc:'비교 및 결론'}],
+related:['khu-2024-nat-2','khu-2025-nat-3'],answerPublic:false},
+
+{id:'khu-2024-nat-2',univ:'경희대',year:'2024',kind:'기출',exam:'자연계 수시',title:'동전 19번 투척 — 조건부 경우의 수',topics:['확률통계'],diff:'상',
+desc:'앞면 16번, 뒷면 3번. (1) 뒷면 연속 금지, (2) 앞면 항상 2번 이상 연속+뒷면 연속 금지.',
+subproblems:[
+  {num:'II-(1)',text:'뒷면이 연속해서 나오지 않는 경우의 수를 구하시오. (12점)',pts:12},
+  {num:'II-(2)',text:'앞면은 항상 2번 이상 연속, 뒷면은 연속 금지인 경우의 수를 구하시오. (21점)',pts:21},
+],
+hint:'(1) H 16개 배열 → 17개 O 자리에 T 3개: ₁₇C₃. (2) T 위치로 블록 분리 → 케이스 4가지.',
+answer:'[II-(1)] ₁₇C₃ = 680\n[II-(2)] 4케이스:\n(i) x₁=0, 나머지≥2: 66\n(ii) x₄=0: 66\n(iii) x₁=x₄=0: 13\n(iv) 모두≥2: 165\n합계 = 310',
+scoring:[{pts:'12점',desc:'₁₇C₃=680'},{pts:'7점',desc:'케이스 분류'},{pts:'7점',desc:'각 중복조합'},{pts:'7점',desc:'합산 310'}],
+related:['khu-2024-nat-1','khu-2024-nat-3'],answerPublic:false},
+
+{id:'khu-2024-nat-3',univ:'경희대',year:'2024',kind:'기출',exam:'자연계 수시',title:'구 위 점의 내분과 정사영 넓이 최대',topics:['기하'],diff:'최상',
+desc:'구 x²+y²+(z-1)²=1 위 점 P(a,a,b)가 AQ를 1:4 내분. 삼각형 ARQ의 xy평면 정사영 넓이 최대.',
+subproblems:[
+  {num:'III-(1)',text:'점 P와 점 Q의 좌표를 구하시오. (10점)',pts:10},
+  {num:'III-(2)',text:'F의 넓이가 최대일 때 세 변의 길이와 cosθ를 구하시오. (27점)',pts:27},
+],
+hint:'P=(Q+4A)/5 → Q 역산. 구 위 조건. R의 z=1일 때 F 최대.',
+answer:'[III-(1)] a=2√2/5, b=8/5\nP=(2√2/5,2√2/5,8/5), Q=(2√2,2√2,0)\n[III-(2)] AR=√2, RQ=3√2, AQ=2√5 (직각삼각형)\ncosθ=2/3',
+scoring:[{pts:'5점',desc:'Q 역산'},{pts:'5점',desc:'a,b 결정'},{pts:'9점',desc:'R 좌표, F 최대 조건'},{pts:'9점',desc:'세 변 길이'},{pts:'9점',desc:'cosθ=2/3'}],
+related:['khu-2024-nat-1','khu-2025-nat-1'],answerPublic:false},
+
+/* ======= 경희대 2023 기출 ======= */
+{id:'khu-2023-nat1-1',univ:'경희대',year:'2023',kind:'기출',exam:'자연계 11/19(토) 오후',title:'타원의 접선과 초점 거리비',topics:['이차곡선'],diff:'중',
+desc:'타원 x²/a²+y²/b²=1의 접선에서 접점 P와 초점 F,F\'까지의 거리비 계산',
+subproblems:[
+  {num:'I-(1)',text:'A(k,0)에서 그은 타원 접선 l의 접점 P를 a,b,k로 나타내시오. (15점)',pts:15},
+  {num:'I-(2)',text:'a=5,b=4,k=13일 때 QF/PF + QF\'/PF\'를 기약분수로 구하시오. (15점)',pts:15},
+],
+hint:'접점 P에서 접선: x₁x/a²+y₁y/b²=1이 A(k,0) 통과 → x₁=a²/k.',
+answer:'[I-(1)] P=(a²/k, b√(1-a²/k²))\n[I-(2)] c=3, P=(25/13,48/13)\n결과: 169/25',
+scoring:[{pts:'5점',desc:'접선 방정식'},{pts:'10점',desc:'P 좌표'},{pts:'5점',desc:'Q 계산'},{pts:'10점',desc:'거리비 도출'}],
+related:['khu-2023-nat1-2','khu-2024-nat-1'],answerPublic:false},
+
+{id:'khu-2023-nat1-2',univ:'경희대',year:'2023',kind:'기출',exam:'자연계 11/19(토) 오후',title:'이동하는 정사각형 겹치는 넓이와 적분',topics:['미적분'],diff:'상',
+desc:'이동하는 정사각형 PQRS와 고정된 ABCD의 겹치는 넓이 f(t), 정적분과 최솟값 문제',
+subproblems:[
+  {num:'II-(1)',text:'g(t) 정의 후 ∫₀³|f(t)-g(t)|dt의 값을 구하시오. (18점)',pts:18},
+  {num:'II-(2)',text:'S(a)가 최소가 되는 1<a<2에서의 a를 구하시오. (15점)',pts:15},
+],
+hint:'t 구간별 겹치는 직사각형 변의 길이 계산. f-g 부호 확인 후 절댓값 적분.',
+answer:'[II-(1)] ∫₀³|f-g|dt = 9\n[II-(2)] 최솟값 a를 S\'(a)=0으로 결정',
+scoring:[{pts:'9점',desc:'구간별 f(t)'},{pts:'9점',desc:'정적분 9'},{pts:'8점',desc:'S(a) 표현'},{pts:'7점',desc:'최솟값 a'}],
+related:['khu-2023-nat1-1','khu-2023-nat2-1'],answerPublic:false},
+
+{id:'khu-2023-nat2-1',univ:'경희대',year:'2023',kind:'기출',exam:'자연계 11/20(일) 오전',title:'y=x² 위 이중접선과 곡선 길이',topics:['미적분'],diff:'상',
+desc:'포물선 y=x² 위 점 A(t,t²)에서 접선과 수직접선. 교점 C의 이동거리와 삼각형 넓이비 극한.',
+subproblems:[
+  {num:'I-(1)',text:'t=1에서 t=2까지 점 C가 움직인 거리 s를 구하시오. (15점)',pts:15},
+  {num:'I-(2)',text:'lim_{t→∞} S(t) (S(t)=△ABC/△AOP)를 구하시오. (15점)',pts:15},
+],
+hint:'l₂의 기울기=-1/(2t). C의 y좌표가 -1/4 상수임을 이용.',
+answer:'[I-(1)] C=(t/2-1/(8t), -1/4), y=-1/4 상수\ns = ∫₁²(1/2+1/(8t²))dt = 9/16\n[I-(2)] lim S(t) = 1/2',
+scoring:[{pts:'9점',desc:'C 좌표'},{pts:'6점',desc:'거리 9/16'},{pts:'9점',desc:'넓이 표현'},{pts:'6점',desc:'극한 1/2'}],
+related:['khu-2023-nat1-2','khu-2023-nat2-2'],answerPublic:false},
+
+{id:'khu-2023-nat2-2',univ:'경희대',year:'2023',kind:'기출',exam:'자연계 11/20(일) 오전',title:'두 함수 교점과 입체도형 부피',topics:['미적분'],diff:'상',
+desc:'f(x)=-x+1/x², g(x)=-x²+k+1/x 교점 분석과 (α-β)² 표현, 입체도형 부피 계산',
+subproblems:[
+  {num:'II-(1)',text:'k>0일 때 두 함수가 서로 다른 두 점에서 만남을 증명하시오. (18점)',pts:18},
+  {num:'II-(2)',text:'교점의 x좌표 α,β로 (α-β)²=S(k) 표현 후 [4,10]에서 단면 넓이 6S(x)인 입체 부피를 구하시오. (15점)',pts:15},
+],
+hint:'h(x)=g-f 증감표로 두 교점 존재 증명. 비에타 공식으로 (α-β)² 계산.',
+answer:'[II-(1)] h\'(x)=1-2/x³=0 → x=2^(1/3)\n그래프로 두 교점 존재\n[II-(2)] α+β=k, αβ=1 → (α-β)²=k²-4\n부피 = ∫₄¹⁰6(x²-4)dx = 512',
+scoring:[{pts:'6점',desc:'증감표'},{pts:'6점',desc:'두 교점 존재'},{pts:'6점',desc:'S(k)=k²-4'},{pts:'5점',desc:'부피 512'},{pts:'5점',desc:'적분 계산'}],
+related:['khu-2023-nat2-1'],answerPublic:false},
+
+/* ======= 건국대 자연계A 2024 ======= */
+{id:'kku-2024-A-1',univ:'건국대',year:'2024',kind:'기출',exam:'자연계A 수시',title:'곡선의 길이와 원 S에 가려진 부분',topics:['미적분'],diff:'상',
+desc:'y=(1/6)x³+1/(2x) 위의 점들 중 원 S(중심 (0,√13/3), 반지름 1)에 가려지지 않는 곡선 길이 계산.',
+subproblems:[
+  {num:'1',text:'원 S에 의해 가려지지 않고 보이는 곡선 y=(1/6)x³+1/(2x)의 부분 길이를 구하시오. (15점)',pts:15},
+],
+hint:'접선 y=mx에서 원 중심 거리=1. 접점과 곡선 교점 x=1, x=√3. 보이는 구간의 곡선 길이 적분.',
+answer:'접선 기울기 m=2/3, 교점 x=1, x=√3\ny\'=x²/2-1/(2x²), 1+y\'²=(x²/2+1/(2x²))²\n\n길이 = ∫₁^√3(x²/2+1/(2x²))dx\n= [x³/6-1/(2x)]₁^√3 = (1+√3)/3',
+scoring:[{pts:'5점',desc:'m=2/3 계산'},{pts:'5점',desc:'교점 x=1,√3'},{pts:'5점',desc:'적분=(1+√3)/3'}],
+related:['kku-2024-A-3','khu-2023-nat2-1'],answerPublic:false},
+
+{id:'kku-2024-A-2',univ:'건국대',year:'2024',kind:'기출',exam:'자연계A 수시',title:'A,B,C,D 문자 배열 — 조건부 순열',topics:['확률통계'],diff:'중',
+desc:'A3,B4,C3,D2 총 12개 문자 배열. [조건1] D 연속 금지, [조건2] 첫 A가 첫 B보다 먼저.',
+subproblems:[
+  {num:'(1)',text:'[조건 1] D가 연속하여 나오지 않는 나열법의 수를 구하시오. (10점)',pts:10},
+  {num:'(2)',text:'[조건 2] 처음 나오는 A가 처음 나오는 B보다 먼저 나오는 나열법의 수를 구하시오. (10점)',pts:10},
+],
+hint:'(1) 여사건: DD 하나로 묶어 계산. (2) 12자리 중 7자리 선택 → 최왼쪽=A, 나머지 6자리에 A2,B4 배치.',
+answer:'[조건1] 12!/(3!4!3!2!) - 11!/(3!4!3!1!) = 231,000\n[조건2] ₁₂C₇ × 6!/(2!4!) × 5!/(3!2!) = 118,800',
+scoring:[{pts:'5점',desc:'D연속 경우 계산'},{pts:'5점',desc:'231,000'},{pts:'7점',desc:'3단계 배치'},{pts:'3점',desc:'118,800'}],
+related:['kku-2024-B-2','khu-2024-nat-2'],answerPublic:false},
+
+{id:'kku-2024-A-3',univ:'건국대',year:'2024',kind:'기출',exam:'자연계A 수시',title:'넓이 S(t)의 미분계수 S\'(ln6)',topics:['미적분'],diff:'최상',
+desc:'두 곡선 y=e^{2x}, y=e^{-(x-t)}+1과 y축으로 둘러싸인 도형의 넓이 S(t). t=ln6에서 미분계수.',
+subproblems:[
+  {num:'3',text:'t=ln6에서의 미분계수 S\'(ln6)을 구하시오. (30점)',pts:30},
+],
+hint:'교점 x좌표 a(t), S(t)=∫₀ᵃ{e^{-(x-t)}+1-e^{2x}}dx. S\'(t): 라이프니츠 공식 적용.',
+answer:'교점: e^{2a}=e^{-(a-t)}+1\nS\'(t) = -e^{-(a-t)} + eᵗ\nt=ln6: b=eᵃ, b³-b-6=0, b=2 → a=ln2\nS\'(ln6) = -3+6 = 3',
+scoring:[{pts:'8점',desc:'S(t) 적분 설정'},{pts:'8점',desc:'S\'(t) 공식'},{pts:'7점',desc:'a=ln2 계산'},{pts:'7점',desc:'S\'(ln6)=3'}],
+related:['kku-2024-B-3','cau-2021-nat-3'],answerPublic:false},
+
+{id:'kku-2024-A-4',univ:'건국대',year:'2024',kind:'기출',exam:'자연계A 수시',title:'cosα 최솟값 — 제2사분면 원 위 점 P',topics:['삼각함수','기하'],diff:'최상',
+desc:'제2사분면의 점 P(반지름 3, 원점 중심)에서 정사각형 A를 바라본 각 α의 cosα 최솟값과 P 좌표.',
+subproblems:[
+  {num:'4',text:'cosα가 최소가 될 때의 점 P의 좌표와 cosα를 구하시오. (35점)',pts:35},
+],
+hint:'P의 y좌표≤1이면 (0,1), >1이면 (1,1)에서 최솟값. 코사인법칙으로 cosα. 두 경우 비교.',
+answer:'[경우1] y≤1: cosα≥2√2/3 (d₁=√7)\n[경우2] y>1: cosα≥√7/3\n최솟값 2√2/3 (경우1)\nP=(1-√14/2, 1+√14/2)',
+scoring:[{pts:'10점',desc:'두 경우 분리'},{pts:'10점',desc:'각 최솟값'},{pts:'8점',desc:'2√2/3 선택'},{pts:'7점',desc:'P 좌표'}],
+related:['khu-2024-nat-3'],answerPublic:false},
+
+/* ======= 건국대 자연계B 2024 ======= */
+{id:'kku-2024-B-1',univ:'건국대',year:'2024',kind:'기출',exam:'자연계B 수시',title:'도형 R의 넓이 최댓값 — 두 원 차이',topics:['미적분','이차곡선'],diff:'상',
+desc:'두 원(반지름1, 반지름1-t)의 겹치는 제1사분면 도형 R의 넓이 최댓값.',
+subproblems:[
+  {num:'1-i',text:'t=1/2일 때 도형 R의 넓이를 구하시오.',pts:7},
+  {num:'1-ii',text:'도형 R의 넓이가 최대가 될 때의 t 값을 구하시오.',pts:8},
+],
+hint:'f(t) 적분 표현. cosθ 치환. f\'(t)=0으로 극값 탐색.',
+answer:'t=1/2: f(1/2) = 5π/48 - √3/8\n\nf\'(t)=0 → √(1-t²)=π(1-t)/2\n→ t=(π²-4)/(π²+4)',
+scoring:[{pts:'7점',desc:'t=1/2 넓이'},{pts:'8점',desc:'t=(π²-4)/(π²+4)'}],
+related:['kku-2024-B-3','khu-2023-nat1-2'],answerPublic:false},
+
+{id:'kku-2024-B-2',univ:'건국대',year:'2024',kind:'기출',exam:'자연계B 수시',title:'A,B,C 문자 배열 — 조건부 순열',topics:['확률통계'],diff:'중',
+desc:'A3,B5,C3 총 11개 문자 배열. [조건1] C 다음 반드시 B 이웃, [조건2] A 다음 B 이웃 금지.',
+subproblems:[
+  {num:'(1)',text:'[조건 1] C 바로 다음에 B가 이웃하여 나오는 나열법의 수는? (10점)',pts:10},
+  {num:'(2)',text:'[조건 2] A 바로 다음에 B가 이웃하지 않는 나열법의 수는? (10점)',pts:10},
+],
+hint:'(1) CB를 한 문자로 취급. (2) A,C 먼저 배열 → A 바로 다음 자리 제외하고 B 배치(중복조합).',
+answer:'[조건1] CB 묶기: 8!/(3!3!2!) = 560\n[조건2] 20 × 56 = 1,120',
+scoring:[{pts:'10점',desc:'560'},{pts:'5점',desc:'A,C 배치 20'},{pts:'5점',desc:'B 배치 56, 총 1120'}],
+related:['kku-2024-A-2'],answerPublic:false},
+
+{id:'kku-2024-B-3',univ:'건국대',year:'2024',kind:'기출',exam:'자연계B 수시',title:'두 원 공통부분 넓이 S(t)의 S\'(1)',topics:['미적분','이차곡선'],diff:'상',
+desc:'중심 원점 반지름1, 중심(t,0) 반지름 t인 두 원의 공통부분 넓이 S(t). S\'(1) 계산.',
+subproblems:[
+  {num:'3',text:'t=1에서의 미분계수 S\'(1)을 구하시오. (30점)',pts:30},
+],
+hint:'두 원 교점 각도 α를 t로 표현. S(t)=부채꼴+부채꼴-삼각형. 코사인법칙+음함수 미분.',
+answer:'cosα=1/(2t), S(t)=α+t²(π-2α)-t·sinα\nt=1: α=π/3, sinα=√3/2, dα/dt=1/√3\nS\'(1) = (2/3)π-√3',
+scoring:[{pts:'10점',desc:'S(t) 표현'},{pts:'10점',desc:'dα/dt 음함수 미분'},{pts:'10점',desc:'S\'(1)=(2/3)π-√3'}],
+related:['kku-2024-A-3','khu-2023-nat1-2'],answerPublic:false},
+
+{id:'kku-2024-B-4',univ:'건국대',year:'2024',kind:'기출',exam:'자연계B 수시',title:'AP²+BP² 최솟값 — 포물선과 원',topics:['이차곡선','미적분'],diff:'최상',
+desc:'중심(1,8) 반지름1인 원 위 점 P. 포물선 y=x²과 직선 y=2x+t의 교점 A(2사분면),B(1사분면). AP²+BP² 최솟값 때 A 좌표.',
+subproblems:[
+  {num:'4',text:'AP²+BP²이 최소가 될 때 점 A의 좌표를 구하시오. (35점)',pts:35},
+],
+hint:'M(1,t+2)에 대해 AP²+BP²=2MP²+10(t+1). MP 최소화 → t=5/2.',
+answer:'2MP²+10(t+1), MP_min=|t-5|\n최솟값: t=5/2일 때\nA의 x좌표=(2-√14)/2\nA=((2-√14)/2, (9-2√14)/2)',
+scoring:[{pts:'10점',desc:'2MP²+상수 변환'},{pts:'10점',desc:'MP_min'},{pts:'8점',desc:'t=5/2'},{pts:'7점',desc:'A 좌표'}],
+related:['kku-2024-A-4'],answerPublic:false},
+
+/* ======= 중앙대 2021 기출 ======= */
+{id:'cau-2021-nat-1',univ:'중앙대',year:'2021',kind:'기출',exam:'자연계열Ⅰ 수시',title:'전기회로 시스템 확률 — 이익 기댓값',topics:['확률통계'],diff:'상',
+desc:'4개 부품 p,q,r,s 전기시스템 (가)→(나) 교체 시, 이익 증가액의 기댓값 계산.',
+subproblems:[
+  {num:'1',text:'시스템 설계를 (가)에서 (나)로 교체할 때 이익 증가액(만 원)의 기댓값을 구하시오. (20점) [각 부품 작동 확률 1/2, 비용 50만원, 확률 1% 증가마다 수익 10만원]',pts:20},
+],
+hint:'(가): P=(p∩s)∪(q∩r)=7/16. (나): P=(p∪q)∩(r∪s)=9/16. 확률 증가분×10-50.',
+answer:'x=7/16 (시스템 가)\ny=9/16 (시스템 나)\n확률 증가=2/16=1/8\n수익=125만원, 비용=50만원\n이익 증가액 기댓값 = 75만원\n(1%p 비율 해석시: 1650/7 ≈ 235.71만원)',
+scoring:[{pts:'7점',desc:'x=7/16'},{pts:'7점',desc:'y=9/16'},{pts:'6점',desc:'기댓값=75만원'}],
+related:['khu-2024-nat-2','kku-2024-A-2'],answerPublic:false},
+
+{id:'cau-2021-nat-2',univ:'중앙대',year:'2021',kind:'기출',exam:'자연계열Ⅰ 수시',title:'삼각함수 넓이 미분 f\'(θ)=2 조건',topics:['삼각함수','미적분'],diff:'상',
+desc:'y=x에 대칭인 두 직선과 y=1/x의 경계 넓이 f(θ). f\'(θ)=2인 θ 탐색.',
+subproblems:[
+  {num:'2-1',text:'f\'(θ)=2를 만족하는 θ를 구하시오. (10점)',pts:10},
+  {num:'2-2',text:'[0,π²+2π]에서 f(x)=√(x+1)+1/{x+2(√(x+1)+1)cos(√(x+1)-1)}의 최댓값을 갖게 하는 x를 구하시오. (15점)',pts:15},
+],
+hint:'f(θ)=-ln(tan(π/4-θ/2)). f\'(θ)=1/cosθ. t=√(x+1)-1로 치환.',
+answer:'[2-1] f\'(θ)=1/cosθ=2 → cosθ=1/2 → θ=π/3\n[2-2] t=√(x+1)-1, g(t)=t+2cost\ng\'=0 → t=π/6 (극솟), t=5π/6에서 최솟값\nf(x) 최댓값: x=(5π/6+1)²-1',
+scoring:[{pts:'4점',desc:'f(θ) 도출'},{pts:'3점',desc:'f\'(θ)=1/cosθ'},{pts:'3점',desc:'θ=π/3'},{pts:'7점',desc:'t 치환 분석'},{pts:'8점',desc:'최댓값 x 계산'}],
+related:['cau-2021-nat-3','khu-2025-nat-3'],answerPublic:false},
+
+{id:'cau-2021-nat-3',univ:'중앙대',year:'2021',kind:'기출',exam:'자연계열Ⅰ 수시',title:'정적분과 음함수·합성함수 미분 — Q의 속도',topics:['미적분'],diff:'상',
+desc:'F(x)=∫₀ˣsin²t dt 관련 정적분 계산, P(cost,sint) 이동시 Q의 속도 (음함수·합성함수 미분).',
+subproblems:[
+  {num:'3-1',text:'∫₀^π(2x-sin2x)e^{F(x)}sin²x dx 의 값을 구하시오. (10점)',pts:10},
+  {num:'3-2',text:'Q가 (2,3)을 지날 때 점 Q의 속도 (dx/dt, dy/dt)를 구하시오. (15점)',pts:15},
+],
+hint:'(3-1) 부분적분. (3-2) 거리조건 미분, dy/dx=7, P의 좌표 계산.',
+answer:'[3-1] = (2π-4)e^{π/2}+4\n[3-2] dy/dx=7, P=(12/13,5/13)\ndx/dt=13/126, dy/dt=91/126',
+scoring:[{pts:'10점',desc:'부분적분 계산'},{pts:'5점',desc:'dy/dx=7'},{pts:'5점',desc:'P 좌표'},{pts:'5점',desc:'Q 속도'}],
+related:['cau-2021-nat-2','kku-2024-A-3'],answerPublic:false},
+
+/* ======= 나침반 풀어보기 ======= */
+{id:'nav-2024-ex-1',univ:'나침반',year:'2024',kind:'유사',exam:'수리논술 나침반 ⅩⅥ — 2022수능 유사',title:'점 P 이동거리 (중점 곡선 — 2022수능)',topics:['미적분'],diff:'중',
+desc:'y=x²과 y=t²x-lnt/8이 만나는 두 점의 중점 P. t=1~e까지 P가 움직인 거리.',
+subproblems:[
+  {num:'풀어보기1',text:'곡선 y=x²과 직선 y=t²x-(lnt)/8이 만나는 두 점의 중점이 P의 위치. t=1에서 t=e까지 P가 움직인 거리는? [2022년 11월 수능]',pts:0},
+],
+hint:'두 교점 x좌표 α,β: x²-t²x+lnt/8=0의 두 근. 중점 x=t²/2, y=t⁴/2-lnt/8.',
+answer:'x(t)=t²/2, y(t)=t⁴/2-lnt/8\ndx/dt=t, dy/dt=2t³-1/(8t)\n(dx/dt)²+(dy/dt)²=(2t³+1/(8t))²\n\n거리=∫₁ᵉ(2t³+1/(8t))dt=[t⁴/2+lnt/8]₁ᵉ\n=(e⁴/2+1/8)-(1/2+0)=e⁴/2-3/8\n\n정답: ①',
+scoring:[],related:['cau-2021-nat-3','kku-2024-A-3'],answerPublic:true},
+
+{id:'nav-2024-ex-2',univ:'나침반',year:'2024',kind:'유사',exam:'수리논술 나침반 ⅩⅥ — 2012전국연합 유사',title:'원과 정사각형 넓이 변화율 (2012전국연합)',topics:['미적분','이차곡선'],diff:'중',
+desc:'반지름1인 원이 이동하며 정사각형과 겹치는 넓이 S. 원 중심이 (1/2,0)일 때 변화율.',
+subproblems:[
+  {num:'풀어보기3',text:'원 중심이 (1/2,0)을 지나는 순간 넓이 S의 시간(초)에 대한 변화율은? (단,0≤t≤1) [2012년 7월 전국연합]',pts:0},
+],
+hint:'∠PO\'Q=θ로 놓으면 cosθ=1-t. S=θ/2-sinθ/4. 연쇄법칙 dS/dt=dS/dθ·dθ/dt.',
+answer:'cosθ=1-t → dθ/dt=1/sinθ\nS=θ/2-(1/4)sin2θ\ndS/dθ=1/2-cosθ/2\ndS/dt=(1-cosθ)/(2sinθ)\nt=1/2: θ=π/3, sinθ=√3/2\ndS/dt=(1/2)/(√3)=√3/6...\n\n정답: ④ √3/2',
+scoring:[],related:['khu-2023-nat1-2','kku-2024-B-3'],answerPublic:true},
+
+{id:'nav-2024-ex-3',univ:'나침반',year:'2024',kind:'유사',exam:'수리논술 나침반 ⅩⅥ — 건국대 유사',title:'동전 카드 배열과 조건부 경우의 수 (2023수능)',topics:['확률통계'],diff:'중',
+desc:'검은 카드 2장과 흰색 카드 1~8(8장) 배열. 조건 (가)(나)(다)를 만족하는 배열 수.',
+subproblems:[
+  {num:'풀어보기2',text:'검은 카드 2장, 흰색 카드 1~8 배열시 조건 (가) 흰색 카드 오름차순, (나) 검은 카드 사이 흰색 2장 이상, (다) 검은 카드 사이 3의 배수 1장 이상인 경우의 수는? [2023년 6월 평가원]',pts:0},
+],
+hint:'a=검은 카드 왼쪽 흰색 수, b=사이, c=오른쪽. b≥2이고 b범위에 3의 배수 없는 경우 제외.',
+answer:'a+b+c=8, b≥2: b\'=b-2로 a+b\'+c=6\n₃H₆=28\n3의 배수 없는 경우: {1,2},{4,5},{7,8} 제외\n28-3=25\n\n정답: 25',
+scoring:[],related:['kku-2024-A-2','khu-2024-nat-2'],answerPublic:true},
+
+/* ======= 유사·예상 문제 ======= */
+{id:'sim-001',univ:'예상문제',year:'2025',kind:'유사',exam:'수리논술 예상',title:'[예상] 포물선 위 접선과 거리 최솟값',topics:['미적분','이차곡선'],diff:'상',
+desc:'경희대 2023 11/20 유형 변형. y=x³ 위 접선과 수직접선의 교점 C의 자취 방정식.',
+subproblems:[
+  {num:'(1)',text:'곡선 y=x³ 위 A(t,t³)에서 접선 l₁과, l₁에 수직이며 y=x³에 접하는 직선 l₂를 구하시오.',pts:15},
+  {num:'(2)',text:'l₁과 l₂의 교점 C의 자취 방정식을 구하시오.',pts:15},
+],
+hint:'y=x³의 접점 (t,t³)에서 기울기=3t². l₂ 기울기=-1/(3t²). l₂와 접하는 점 s 탐색.',
+answer:'l₁: y=3t²x-2t³\nl₂의 기울기=-1/(3t²), 접점(s,s³): 3s²=-1/(3t²)\n교점 C를 t로 표현 → 자취 방정식 도출',
+scoring:[{pts:'8점',desc:'l₁,l₂ 방정식'},{pts:'7점',desc:'C 좌표'},{pts:'15점',desc:'자취 방정식'}],
+related:['khu-2023-nat2-1','sim-002'],answerPublic:false},
+
+{id:'sim-002',univ:'예상문제',year:'2025',kind:'유사',exam:'수리논술 예상',title:'[예상] 등비급수 도형 넓이 합 최댓값',topics:['수열','미적분'],diff:'중',
+desc:'경희대 2025 논제Ⅲ 유사. 삼각형 Tₙ의 넓이가 등비수열일 때 합 S(α) 최댓값.',
+subproblems:[
+  {num:'(1)',text:'넓이가 등비수열일 때 공비를 구하고 S(α)를 표현하시오.',pts:15},
+  {num:'(2)',text:'S(α)의 최댓값과 그때의 α를 구하시오.',pts:15},
+],
+hint:'닮음비 일정 → 넓이비=(닮음비)². 등비급수 합으로 S(α) 표현 후 미분.',
+answer:'공비 r=cos²α\nS(α)=S₁/sin²α\nS\'(α)=0 → α=π/4에서 최댓값=2S₁',
+scoring:[{pts:'5점',desc:'공비 계산'},{pts:'10점',desc:'S(α) 표현'},{pts:'15점',desc:'미분으로 최댓값'}],
+related:['khu-2025-nat-3','sim-001'],answerPublic:false},
+
+];/* end PROBLEMS */
+
+
+/* ===== STATE ===== */
+let isTeacher=false;
+let currentFilters={univ:'',year:'',topic:'',diff:'',type:'',search:''};
+let answersShared={};
+let selectedForPrint=new Set();
+let selectMode=false;
+let currentVisibleList=[];
+const TEACHER_PW='11154';
+
+/* ===== INIT ===== */
+document.addEventListener('DOMContentLoaded',()=>{
+  updateBadges();
+  renderStats();
+  renderProblems(PROBLEMS);
+  setTimeout(()=>{
+    if(window.renderMathInElement){
+      renderMathInElement(document.body,{
+        delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],
+        throwOnError:false
+      });
+    }
+  },600);
+});
+
+/* ===== BADGES ===== */
+function updateBadges(){
+  const count=(f)=>PROBLEMS.filter(f).length;
+  document.getElementById('totalBadge').textContent=PROBLEMS.length;
+  document.getElementById('b-skku').textContent=count(p=>p.univ==='성균관대');
+  document.getElementById('b-khu').textContent=count(p=>p.univ==='경희대');
+  document.getElementById('b-kku').textContent=count(p=>p.univ==='건국대');
+  document.getElementById('b-cau').textContent=count(p=>p.univ==='중앙대');
+  document.getElementById('b-nav').textContent=count(p=>p.univ==='나침반'||p.kind==='유사');
+}
+
+/* ===== STATS ===== */
+function renderStats(){
+  const s=[
+    {i:'📚',n:PROBLEMS.length,l:'전체 문제'},
+    {i:'🏛',n:PROBLEMS.filter(p=>p.univ==='성균관대').length,l:'성균관대'},
+    {i:'🎓',n:PROBLEMS.filter(p=>p.univ==='경희대').length,l:'경희대'},
+    {i:'🏗',n:PROBLEMS.filter(p=>p.univ==='건국대').length,l:'건국대'},
+    {i:'🏢',n:PROBLEMS.filter(p=>p.univ==='중앙대').length,l:'중앙대'},
+    {i:'🔁',n:PROBLEMS.filter(p=>p.kind==='유사').length,l:'유사·예상'},
+  ];
+  const html=s.map(x=>`<div class="stat-card"><div class="stat-icon">${x.i}</div><div class="stat-num">${x.n}</div><div class="stat-label">${x.l}</div></div>`).join('');
+  document.getElementById('statsGrid').innerHTML=html;
+  document.getElementById('teacherStatsGrid').innerHTML=html;
+}
+
+/* ===== CARD ===== */
+function univClass(u){
+  if(u==='성균관대') return 'tag-univ-skku';
+  if(u==='경희대') return 'tag-univ-khu';
+  if(u==='건국대') return 'tag-univ-kku';
+  if(u==='중앙대') return 'tag-univ-cau';
+  return 'tag-univ-etc';
+}
+
+function problemCard(p,i,teacher=false){
+  const shared=answersShared[p.id];
+  const sel=selectedForPrint.has(p.id);
+  return `<div class="problem-card fade-in${sel?' card-selected':''}" id="card-${p.id}" style="animation-delay:${Math.min(i*0.03,0.5)}s" onclick="cardClick('${p.id}')">
+    <div class="card-select-check" id="chk-${p.id}">
+      <svg width="12" height="10" viewBox="0 0 12 10" fill="none"><polyline points="1,5 4.5,8.5 11,1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <div class="card-header">
+      <div class="card-meta">
+        <span class="tag ${univClass(p.univ)}">${p.univ}</span>
+        <span class="tag tag-year">${p.year}</span>
+        <span class="tag tag-diff-${p.diff}">${p.diff}</span>
+        ${p.kind!=='기출'?`<span class="tag tag-mock">${p.kind}</span>`:''}
+      </div>
+      ${teacher?`<span style="font-size:11px;color:${shared?'var(--green)':'var(--text3)'}">${shared?'👁공개':'🔒비공개'}</span>`:''}
+    </div>
+    <div class="card-title">${p.title}</div>
+    <div class="card-desc">${p.desc}</div>
+    <div class="card-footer">
+      <div class="card-topics">${p.topics.map(t=>`<span class="topic-chip">${t}</span>`).join('')}</div>
+      <span class="card-arrow">→</span>
+    </div>
+  </div>`;
+}
+
+function cardClick(id){
+  if(selectMode) togglePrintSelect(id);
+  else openModal(id);
+}
+
+function renderProblems(list){
+  currentVisibleList=list;
+  const grid=document.getElementById('problemGrid');
+  const empty=document.getElementById('emptyState');
+  const count=document.getElementById('viewCount');
+  if(!list.length){grid.innerHTML='';empty.style.display='block';count.textContent='검색 결과 없음';return;}
+  empty.style.display='none';
+  count.textContent=`총 ${list.length}개의 문제`;
+  grid.innerHTML=list.map((p,i)=>problemCard(p,i)).join('');
+  if(selectMode) grid.classList.add('select-mode');
+  if(isTeacher) document.getElementById('teacherProblemGrid').innerHTML=list.map((p,i)=>problemCard(p,i,true)).join('');
+}
+
+/* ===== FILTERS ===== */
+function applyFilters(){
+  currentFilters.univ=document.getElementById('f-univ').value;
+  currentFilters.year=document.getElementById('f-year').value;
+  currentFilters.topic=document.getElementById('f-topic').value;
+  currentFilters.diff=document.getElementById('f-diff').value;
+  currentFilters.type=document.getElementById('f-type').value;
+  currentFilters.search=(document.getElementById('searchInput').value||'').trim().toLowerCase();
+  let list=PROBLEMS.filter(p=>{
+    if(currentFilters.univ&&p.univ!==currentFilters.univ) return false;
+    if(currentFilters.year&&p.year!==currentFilters.year) return false;
+    if(currentFilters.topic&&!p.topics.includes(currentFilters.topic)) return false;
+    if(currentFilters.diff&&p.diff!==currentFilters.diff) return false;
+    if(currentFilters.type&&p.kind!==currentFilters.type) return false;
+    if(currentFilters.search){
+      const s=currentFilters.search;
+      return p.title.toLowerCase().includes(s)||p.univ.includes(s)||p.topics.some(t=>t.includes(s))||p.desc.toLowerCase().includes(s);
+    }
+    return true;
+  });
+  renderProblems(list);
+}
+
+function resetFilters(){
+  ['f-univ','f-year','f-topic','f-diff','f-type'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('searchInput').value='';
+  currentFilters={univ:'',year:'',topic:'',diff:'',type:'',search:''};
+  renderProblems(PROBLEMS);
+  document.getElementById('viewTitle').textContent='전체 문제';
+  document.querySelectorAll('.sidebar-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelector('.sidebar-btn').classList.add('active');
+}
+function filterByUniv(u,btn){document.getElementById('f-univ').value=u;currentFilters.univ=u;applyFilters();document.getElementById('viewTitle').textContent=u+' 문제';hl(btn);}
+function filterByTopic(t,btn){document.getElementById('f-topic').value=t;currentFilters.topic=t;applyFilters();document.getElementById('viewTitle').textContent=t+' 단원 문제';hl(btn);}
+function filterByDiff(d,btn){document.getElementById('f-diff').value=d;currentFilters.diff=d;applyFilters();document.getElementById('viewTitle').textContent='난이도 '+d+' 문제';hl(btn);}
+function showView(v,btn){hl(btn);if(v==='similar'){document.getElementById('f-type').value='유사';currentFilters.type='유사';applyFilters();document.getElementById('viewTitle').textContent='유사·예상 문제';}else resetFilters();}
+function hl(btn){document.querySelectorAll('.sidebar-btn').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');}
+
+/* ===== MAIN TAB ===== */
+function switchMainTab(mode,btn){
+  document.querySelectorAll('.header-tab').forEach(b=>b.classList.remove('active'));
+  if(btn)btn.classList.add('active');
+  isTeacher=(mode==='teacher');
+  document.getElementById('studentView').style.display=isTeacher?'none':'block';
+  document.getElementById('teacherView').style.display=isTeacher?'block':'none';
+  if(isTeacher) document.getElementById('teacherProblemGrid').innerHTML=PROBLEMS.map((p,i)=>problemCard(p,i,true)).join('');
+}
+
+/* ===== PASSWORD ===== */
+function openPwModal(){
+  document.getElementById('pwInput').value='';
+  document.getElementById('pwErr').textContent='';
+  document.getElementById('pwInput').classList.remove('error');
+  document.getElementById('pwInput').type='password';
+  document.getElementById('pwEye').textContent='👁';
+  document.getElementById('pwOverlay').classList.add('open');
+  setTimeout(()=>document.getElementById('pwInput').focus(),120);
+}
+function closePwModal(){
+  document.getElementById('pwOverlay').classList.remove('open');
+  document.getElementById('tab-student').classList.add('active');
+  document.getElementById('tab-teacher').classList.remove('active');
+}
+function togglePwEye(){
+  const inp=document.getElementById('pwInput');
+  const eye=document.getElementById('pwEye');
+  if(inp.type==='password'){inp.type='text';eye.textContent='🙈';}
+  else{inp.type='password';eye.textContent='👁';}
+}
+function checkPw(){
+  const val=document.getElementById('pwInput').value;
+  if(val===TEACHER_PW){
+    document.getElementById('pwOverlay').classList.remove('open');
+    switchMainTab('teacher',document.getElementById('tab-teacher'));
+    showToast('🔑 교사 모드로 전환되었습니다.');
+  } else {
+    const err=document.getElementById('pwErr');
+    err.textContent='비밀번호가 올바르지 않습니다.';
+    const inp=document.getElementById('pwInput');
+    inp.classList.add('error');
+    inp.value='';
+    setTimeout(()=>inp.classList.remove('error'),400);
+    inp.focus();
+  }
+}
+
+/* ===== MODAL ===== */
+function escHtml(s){if(!s)return '';return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+function openModal(id){
+  const p=PROBLEMS.find(x=>x.id===id);
+  if(!p) return;
+  document.getElementById('modalMeta').innerHTML=`
+    <span class="tag ${univClass(p.univ)}">${p.univ}</span>
+    <span class="tag tag-year">${p.year} ${p.kind}</span>
+    <span class="tag tag-diff-${p.diff}">${p.diff}</span>
+    ${p.topics.map(t=>`<span class="tag tag-type">${t}</span>`).join('')}`;
+  document.getElementById('modalTitle').textContent=p.title;
+  const canSee=isTeacher||answersShared[p.id]||p.answerPublic;
+  document.getElementById('answerTab').style.display=canSee?'':'none';
+
+  document.getElementById('panel-problem').innerHTML=`
+    <div class="problem-section">
+      <div class="section-label">시험 정보</div>
+      <div style="font-size:13px;color:var(--text2);margin-bottom:16px;">📝 ${p.exam} &nbsp;|&nbsp; 🏷 ${p.topics.join(', ')}</div>
+    </div>
+    <div class="problem-section">
+      <div class="section-label">소문항</div>
+      ${p.subproblems.map(sp=>`<div class="sub-problem"><div class="sub-problem-num">[${sp.num}]${sp.pts?' — '+sp.pts+'점':''}</div><div class="sub-problem-text">${sp.text}</div></div>`).join('')}
+    </div>`;
+
+  document.getElementById('panel-hint').innerHTML=`
+    <div class="answer-box"><div class="answer-header"><span class="answer-title">💡 풀이 힌트</span></div><div class="answer-text">${p.hint}</div></div>`;
+
+  const total=p.subproblems.reduce((a,s)=>a+s.pts,0);
+  document.getElementById('panel-answer').innerHTML=`
+    ${isTeacher?'<div class="teacher-only-badge">🔑 교사 전용 — 채점기준 및 모범답안</div>':''}
+    <div class="problem-section">
+      <div class="section-label">모범 답안</div>
+      <div class="answer-box">
+        <div class="answer-header"><span class="answer-title">📋 예시 답안</span>${total?`<span class="points-badge">총 ${total}점</span>`:''}</div>
+        <div class="answer-text" style="white-space:pre-line;">${escHtml(p.answer)}</div>
+      </div>
+    </div>
+    ${p.scoring&&p.scoring.length?`<div class="problem-section" style="margin-top:18px;"><div class="section-label">채점 기준</div><div class="answer-box">${p.scoring.map(s=>`<div class="scoring-item"><span class="scoring-pts">${escHtml(s.pts)}</span><span class="scoring-desc">${escHtml(s.desc)}</span></div>`).join('')}</div></div>`:''}`;
+
+  const related=(p.related||[]).map(rid=>{
+    const rp=PROBLEMS.find(x=>x.id===rid);
+    if(!rp) return '';
+    return `<div class="similar-card" onclick="closeModal();setTimeout(()=>openModal('${rp.id}'),200)">
+      <div class="similar-icon">📄</div>
+      <div class="similar-info"><div class="similar-title">${rp.title}</div><div class="similar-meta">${rp.univ} ${rp.year} · ${rp.diff} · ${rp.topics.join(', ')}</div></div>
+      <span style="color:var(--text3)">→</span></div>`;
+  }).join('');
+  document.getElementById('panel-similar').innerHTML=`<div class="similar-grid">${related||'<div class="empty-state"><div class="empty-icon">🔗</div><div>관련 문제가 없습니다.</div></div>'}</div>`;
+
+  const inSel=selectedForPrint.has(p.id);
+  document.getElementById('shareControls').innerHTML=`
+    ${isTeacher?`<button class="share-btn primary" onclick="toggleShare('${p.id}')">${answersShared[p.id]?'🔒 비공개로 전환':'👁 학생에게 답안 공개'}</button>`:''}
+    <button class="share-btn" id="modalPrintAddBtn" onclick="togglePrintSelectFromModal('${p.id}')"
+      style="border-color:${inSel?'var(--accent2)':'var(--border)'};color:${inSel?'var(--accent)':'var(--text2)'}">
+      ${inSel?'✅ 인쇄 목록에 추가됨':'➕ 인쇄 목록에 추가'}
+    </button>
+    <button class="share-btn" onclick="quickPrintSingle('${p.id}')">🖨 바로 출력</button>
+    <button class="share-btn" onclick="copyL('${p.id}')">🔗 링크 복사</button>
+    ${!isTeacher?'<span style="font-size:12px;color:var(--text3);margin:auto 0 auto 4px;">답안은 교사 설정에 따라 공개됩니다.</span>':''}`;
+
+  switchModalTab('problem',document.querySelector('.modal-tab'));
+  document.getElementById('modalOverlay').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+
+function closeModal(){document.getElementById('modalOverlay').classList.remove('open');document.body.style.overflow='';}
+function closeModalOnBg(e){if(e.target===document.getElementById('modalOverlay'))closeModal();}
+function switchModalTab(tab,btn){
+  document.querySelectorAll('.modal-tab').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  if(btn)btn.classList.add('active');
+  const panel=document.getElementById('panel-'+tab);
+  if(panel)panel.classList.add('active');
+}
+
+/* ===== TEACHER ===== */
+function toggleShare(id){
+  answersShared[id]=!answersShared[id];
+  showToast(answersShared[id]?'✅ 학생에게 답안이 공개되었습니다.':'🔒 답안이 비공개로 설정되었습니다.');
+  if(isTeacher) document.getElementById('teacherProblemGrid').innerHTML=PROBLEMS.map((p,i)=>problemCard(p,i,true)).join('');
+}
+
+/* ===== SELECT MODE ===== */
+function toggleSelectMode(){
+  selectMode=!selectMode;
+  const btn=document.getElementById('selectToggleBtn');
+  const allBtn=document.getElementById('selectAllBtn');
+  const grid=document.getElementById('problemGrid');
+  if(selectMode){
+    btn.classList.add('active');
+    btn.innerHTML='✅ 선택 완료';
+    allBtn.style.display='flex';
+    grid.classList.add('select-mode');
+    showToast('💡 카드를 클릭하여 문제를 선택하세요.');
+  } else {
+    btn.classList.remove('active');
+    btn.innerHTML='&#9745; 문제 선택';
+    allBtn.style.display='none';
+    grid.classList.remove('select-mode');
+    if(selectedForPrint.size>0) openPrintPanel();
+  }
+}
+
+function selectAllVisible(){
+  currentVisibleList.forEach(p=>{
+    selectedForPrint.add(p.id);
+    const card=document.getElementById('card-'+p.id);
+    if(card) card.classList.add('card-selected');
+  });
+  updatePrintUI();
+  showToast(`${selectedForPrint.size}개 문제가 선택되었습니다.`);
+}
+
+function togglePrintSelect(id){
+  if(selectedForPrint.has(id)){
+    selectedForPrint.delete(id);
+    const card=document.getElementById('card-'+id);
+    if(card) card.classList.remove('card-selected');
+  } else {
+    selectedForPrint.add(id);
+    const card=document.getElementById('card-'+id);
+    if(card) card.classList.add('card-selected');
+  }
+  updatePrintUI();
+}
+
+function togglePrintSelectFromModal(id){
+  togglePrintSelect(id);
+  const btn=document.getElementById('modalPrintAddBtn');
+  const inSel=selectedForPrint.has(id);
+  if(btn){
+    btn.style.borderColor=inSel?'var(--accent2)':'var(--border)';
+    btn.style.color=inSel?'var(--accent)':'var(--text2)';
+    btn.innerHTML=inSel?'✅ 인쇄 목록에 추가됨':'➕ 인쇄 목록에 추가';
+  }
+  showToast(inSel?'📋 인쇄 목록에 추가되었습니다.':'🗑 인쇄 목록에서 제거되었습니다.');
+}
+
+function updatePrintUI(){
+  const n=selectedForPrint.size;
+  const fab=document.getElementById('printFab');
+  const badge=document.getElementById('fabBadge');
+  if(n>0){fab.style.display='flex';badge.textContent=n;}
+  else fab.style.display='none';
+  document.getElementById('printCountNum').textContent=n;
+  document.getElementById('printGoBtn').disabled=(n===0);
+  renderPrintList();
+}
+
+/* ===== PRINT PANEL ===== */
+function openPrintPanel(){
+  document.getElementById('printPanelOverlay').classList.add('open');
+  renderPrintList();
+}
+function closePrintPanel(e){
+  if(e.target===document.getElementById('printPanelOverlay'))closePrintPanelDirect();
+}
+function closePrintPanelDirect(){
+  document.getElementById('printPanelOverlay').classList.remove('open');
+}
+
+function renderPrintList(){
+  const body=document.getElementById('printPanelBody');
+  if(selectedForPrint.size===0){
+    body.innerHTML=`<div style="text-align:center;padding:40px 0;color:var(--text3);"><div style="font-size:36px;margin-bottom:10px;">📋</div><div style="font-size:14px;">선택된 문제가 없습니다.</div><div style="font-size:12px;margin-top:6px;">"문제 선택" 버튼으로 문제를 추가하세요.</div></div>`;
+    return;
+  }
+  const items=[...selectedForPrint].map(id=>{
+    const p=PROBLEMS.find(x=>x.id===id);
+    if(!p) return '';
+    const total=p.subproblems.reduce((a,s)=>a+s.pts,0);
+    return `<div class="print-q-item" id="pqi-${id}">
+      <div class="print-q-info">
+        <div class="print-q-title">${p.title}</div>
+        <div class="print-q-meta">${p.univ} ${p.year} · ${p.diff}${total?' · '+total+'점':''}</div>
+      </div>
+      <button class="print-q-remove" onclick="removePrintItem('${id}')" title="제거">✕</button>
+    </div>`;
+  }).join('');
+  body.innerHTML=`<div class="print-section-label">선택된 문제</div>${items}`;
+}
+
+function removePrintItem(id){
+  selectedForPrint.delete(id);
+  const card=document.getElementById('card-'+id);
+  if(card) card.classList.remove('card-selected');
+  updatePrintUI();
+}
+
+function clearPrintList(){
+  selectedForPrint.forEach(id=>{
+    const card=document.getElementById('card-'+id);
+    if(card) card.classList.remove('card-selected');
+  });
+  selectedForPrint.clear();
+  updatePrintUI();
+}
+
+/* ===== BUILD PRINT HTML ===== */
+function buildPrintHTML(ids,opts){
+  const problems=ids.map(id=>PROBLEMS.find(x=>x.id===id)).filter(Boolean);
+  const today=new Date().toLocaleDateString('ko-KR');
+
+  const blocksHTML=problems.map((p,i)=>{
+    const total=p.subproblems.reduce((a,s)=>a+s.pts,0);
+    const subHTML=p.subproblems.map(sp=>`<div class="sub"><div class="sub-num">[${sp.num}]${sp.pts?' ('+sp.pts+'점)':''}</div><div class="sub-text">${sp.text}</div></div>`).join('');
+    const hintHTML=opts.hint&&p.hint?`<div class="hint-box"><div class="hint-label">💡 힌트</div><div>${p.hint}</div></div>`:'';
+    const ansHTML=opts.answer&&p.answer?`<div class="ans-box"><div class="ans-label">📋 모범 답안${total?' (총 '+total+'점)':''}</div><div class="ans-body">${p.answer.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>')}</div></div>`:'';
+    const scHTML=opts.scoring&&p.scoring&&p.scoring.length?`<div class="sc-box"><div class="sc-label">✓ 채점 기준</div>${p.scoring.map(s=>`<div class="sc-row"><span class="sc-p">${s.pts}</span><span>${s.desc}</span></div>`).join('')}</div>`:'';
+    const pb=opts.pagebreak&&i<problems.length-1?'style="page-break-after:always;"':'';
+    return `<div class="prob-block" ${pb}>
+      <div class="prob-head">
+        <div class="prob-tags">
+          <span class="t-univ">${p.univ}</span><span class="t-year">${p.year} ${p.kind}</span><span class="t-diff">${p.diff}</span>
+          ${p.topics.map(t=>`<span class="t-topic">${t}</span>`).join('')}
+        </div>
+        <div class="prob-title">${p.title}</div>
+        <div class="prob-exam">${p.exam}</div>
+      </div>
+      ${subHTML}${hintHTML}${ansHTML}${scHTML}
+      <div class="ans-space">【 풀 이 공 간 】</div>
+    </div>`;
+  }).join('');
+
+  return `<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><title>수리논술 문제지</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Noto Sans KR',sans-serif;color:#111;background:#fff;}
+@media screen{body{max-width:860px;margin:0 auto;padding:32px;}}
+@media print{body{padding:16px 20px;}}
+.top{text-align:center;padding:18px 0 14px;border-bottom:3px solid #1e293b;margin-bottom:30px;}
+.top h1{font-family:'Noto Serif KR',serif;font-size:22px;font-weight:700;color:#1e293b;}
+.top .meta{font-size:12px;color:#64748b;margin-top:5px;}
+.top .cnt{display:inline-block;background:#3b82f6;color:#fff;padding:3px 14px;border-radius:12px;font-size:12px;font-weight:700;margin-top:8px;}
+.prob-block{margin-bottom:32px;}
+.prob-head{margin-bottom:12px;}
+.prob-tags{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:5px;}
+.t-univ,.t-year,.t-diff,.t-topic{font-size:11px;font-weight:600;padding:2px 8px;border-radius:10px;}
+.t-univ{background:#fef3c7;color:#92400e;border:1px solid #fcd34d;}
+.t-year{background:#f1f5f9;color:#475569;border:1px solid #cbd5e1;}
+.t-diff{background:#fce7f3;color:#9d174d;border:1px solid #f9a8d4;}
+.t-topic{background:#eff6ff;color:#1d4ed8;border:1px solid #bfdbfe;}
+.prob-title{font-family:'Noto Serif KR',serif;font-size:18px;font-weight:700;color:#1e293b;margin-bottom:2px;}
+.prob-exam{font-size:11px;color:#64748b;}
+.sub{border-left:3px solid #3b82f6;padding:11px 16px;margin:8px 0;background:#f8fafc;border-radius:0 6px 6px 0;}
+.sub-num{font-size:12px;font-weight:700;color:#3b82f6;margin-bottom:4px;}
+.sub-text{font-size:14px;line-height:1.9;color:#1e293b;}
+.hint-box{background:#fffbeb;border:1px solid #fcd34d;border-radius:6px;padding:11px 16px;margin-top:10px;}
+.hint-label{font-size:11px;font-weight:700;color:#92400e;margin-bottom:3px;}
+.ans-box{background:#f0fdf4;border:1px solid #86efac;border-radius:6px;padding:12px 16px;margin-top:12px;}
+.ans-label{font-size:11px;font-weight:700;color:#166534;margin-bottom:6px;}
+.ans-body{font-size:13px;line-height:1.9;color:#1e293b;}
+.sc-box{background:#f0f9ff;border:1px solid #7dd3fc;border-radius:6px;padding:10px 16px;margin-top:8px;}
+.sc-label{font-size:11px;font-weight:700;color:#075985;margin-bottom:6px;}
+.sc-row{display:flex;gap:10px;padding:4px 0;border-bottom:1px solid #bae6fd;font-size:12px;}
+.sc-row:last-child{border-bottom:none;}
+.sc-p{font-weight:700;color:#0369a1;white-space:nowrap;min-width:36px;}
+.ans-space{border:1px dashed #cbd5e1;border-radius:6px;padding:64px 0;text-align:center;color:#94a3b8;font-size:13px;margin-top:12px;letter-spacing:3px;}
+@media print{.prob-block{break-inside:avoid;}}
+</style></head><body>
+<div class="top"><h1>수리논술 기출문제 모음</h1>
+<div class="meta">출력일: ${today}&nbsp;|&nbsp;총 ${problems.length}문제${opts.answer?' &middot; 모범답안 포함':''}${opts.scoring?' &middot; 채점기준 포함':''}</div>
+<div class="cnt">${problems.length}문제</div></div>
+${blocksHTML}
+<script>window.onload=function(){window.print();};<\/script>
+</body></html>`;
+}
+
+function doPrint(){
+  if(selectedForPrint.size===0){showToast('선택된 문제가 없습니다.');return;}
+  const opts={
+    answer:document.getElementById('opt-answer').checked,
+    scoring:document.getElementById('opt-scoring').checked,
+    hint:document.getElementById('opt-hint').checked,
+    pagebreak:document.getElementById('opt-pagebreak').checked,
+  };
+  const html=buildPrintHTML([...selectedForPrint],opts);
+  const w=window.open('','_blank','width=920,height=720');
+  if(!w){showToast('팝업이 차단되었습니다. 팝업 허용 후 다시 시도해주세요.');return;}
+  w.document.open();w.document.write(html);w.document.close();
+}
+
+function quickPrintSingle(id){
+  const opts={answer:isTeacher,scoring:false,hint:true,pagebreak:false};
+  const html=buildPrintHTML([id],opts);
+  const w=window.open('','_blank','width=920,height=720');
+  if(!w){showToast('팝업이 차단되었습니다. 팝업 허용 후 다시 시도해주세요.');return;}
+  w.document.open();w.document.write(html);w.document.close();
+}
+
+/* ===== UTILS ===== */
+function copyL(id){
+  navigator.clipboard.writeText(location.href+'#'+id).then(()=>showToast('🔗 링크가 복사되었습니다.')).catch(()=>showToast('복사 실패'));
+}
+
+function showToast(msg){
+  let t=document.getElementById('toast');
+  if(!t){
+    t=document.createElement('div');t.id='toast';
+    t.style.cssText='position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:#1a2235;border:1px solid #2a3a55;color:#e2e8f0;padding:10px 22px;border-radius:24px;font-size:14px;z-index:9999;transition:opacity .3s;box-shadow:0 4px 20px rgba(0,0,0,.4);white-space:nowrap;pointer-events:none;';
+    document.body.appendChild(t);
+  }
+  t.textContent=msg;t.style.opacity='1';
+  clearTimeout(t._t);t._t=setTimeout(()=>{t.style.opacity='0';},2500);
+}
+
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'){
+    if(document.getElementById('pwOverlay').classList.contains('open')){closePwModal();return;}
+    if(document.getElementById('printPanelOverlay').classList.contains('open')){closePrintPanelDirect();return;}
+    closeModal();
+  }
+});
+
+</script>
+</body>
+</html>
